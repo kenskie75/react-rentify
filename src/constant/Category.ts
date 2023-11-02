@@ -1,24 +1,24 @@
-import Car from '../../../public/Images/car.jpg'
-import Suv from '../../../public/Images/suv.jpg'
-import Hiace from '../../../public/Images/hiace-van.png'
-import Truck from '../../../public/Images/truck.jpg'
 
+const car = require('../assets/images/car.jpg');
+const suv = require('../assets/images/suv.jpg');
+const highace = require('../assets/images/hiace-van.png');
+const truck = require('../assets/images/truck.jpg');
 
 export const vehicleCategory = [
     {
         name:'Car',
-        image:Car
+        image:car
     },
     {
         name:'SUV',
-        image:Suv
+        image:suv
     },
     {
         name:'Van',
-        image:Hiace
+        image:highace
     },
     {
         name:'Trucks',
-        image:Truck
+        image:truck
     }
 ]
