@@ -6,6 +6,8 @@ import Select from "./Select"
 import Cards from './Cards'
 import ListItem from "./ListItem"
 import Modal from './Modal'
+import ModalContent from "./ModalContent"
+import Container from './Container';
 
 export {
     Navigation,
@@ -15,5 +17,7 @@ export {
     Select,
     Cards,
     ListItem,
-    Modal
+    Modal,
+    ModalContent,
+    Container
 }

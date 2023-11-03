@@ -92,7 +92,7 @@ export default  function Navigation() {
         getUser()
     },[])
     return (
-    <nav className=' p-3 bg-black flex fixed w-screen z-50'>
+    <nav className=' p-3 bg-black flex fixed w-screen z-30'>
         <ul className=" px-4">
             <li className=" p-3 text-white font-bold text-xl">
                 Rentify

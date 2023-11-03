@@ -13,3 +13,10 @@ export const createDriver = async(payload:any)=>{
 
     return resp.data;
 }
+
+export const getDriverByOwner = async(ownerId:string)=>{
+    const resp = await axiosInstance.get(`drivers/getdriverbyowner/${ownerId}`)
+
+
+    return resp.data;
+}

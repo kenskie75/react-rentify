@@ -2,19 +2,22 @@
 import Swal from "sweetalert2";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { TextInput, Button } from "../../../component";
+import { TextInput, Button, ModalContent } from "../../../component";
 import { dataIsRequired } from "../../../constant/String";
 import { userLogin } from "../../../services/UserService";
 import useAlertOption from "../../../hooks/useAlertOption";
 import { Routes } from "../../../types/Routes.enum";
+import { useModalContext } from "../../../context/ModalContext/ModalContext";
 
 export default function Login() {
   const [username,setUsername] = useState<string>('');
   const [password,setPassword] = useState<string>('');
   const {alertWarning,alertError} = useAlertOption(); 
+  const {isOpen,setIsOpen,setContent,setIsFullScreen} = useModalContext();
 
   async function handleLogin(){
     try {
+      setIsOpen(!isOpen)
       if(!username){
         alertWarning(dataIsRequired('Username'));
         return;

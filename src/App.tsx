@@ -2,9 +2,6 @@ import { BrowserRouter,Routes as ReactRoutes,Route } from 'react-router-dom';
 import './App.css';
 import { Button, Navigation } from './component';
 import { Routes } from './types/Routes.enum';
-import Home from './pages/homepage';
-import Login from './pages/auth/login';
-import { getDataFromStorage } from './utils/storage';
 import {  useMemo } from 'react';
 import useGetAccountFromStorage from './hooks/useGetAccountFromStorage';
 import DriverLogin from './pages/auth/driverlogin';
@@ -12,10 +9,12 @@ import Register from './pages/auth/register';
 import Cvehicles from './pages/customer/vehicles';
 import UnAuth from './RouterComponents/UnAuth';
 import Renter from './RouterComponents/Renter';
+import ModalContextProvider from './context/ModalContext/ModalContext';
+import Owner from './RouterComponents/Owner';
 
 
 function App() {
-  const {user} = useGetAccountFromStorage();
+  const {user,isLoading} = useGetAccountFromStorage();
 
   
   const loading = () =>{
@@ -27,7 +26,11 @@ function App() {
    }
 
   const checkRoutes = useMemo(()=>{
-    if(!user){
+    if(isLoading){
+      return loading();
+    }
+    
+    if(user === undefined){
       return <UnAuth/>
     }
 
@@ -36,17 +39,24 @@ function App() {
       if(user.user_type === 'RENTER'){
         return <Renter/>
       }
+
+      if(user.user_type === 'OWNER'){
+        return <Owner/>
+      }
     }
-    loading();
-  },[user])
+   
+  },[user,isLoading])
 
   return (
    <>
+   <ModalContextProvider>
     <BrowserRouter>
       <Navigation/>
       {checkRoutes}     
     </BrowserRouter>
+    </ModalContextProvider>
    </>
+   
   );
 }
 

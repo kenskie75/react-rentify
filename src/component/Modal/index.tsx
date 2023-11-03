@@ -1,4 +1,5 @@
 'use client';
+import { useMemo } from 'react';
 import { Button } from '..';
 
 type Props = {
@@ -8,8 +9,7 @@ type Props = {
     children:React.ReactNode;
     isFullScreen?:boolean;
     onConfirm?:()=>void;
-
-}
+  }
 
 const Modal = (props:Props) => {
     const {isOpen,children,setIsOpen} = props;
@@ -22,17 +22,19 @@ const Modal = (props:Props) => {
     props.onClose();
   };
 
-  function handleConfirm(){
-    if(!props.onConfirm){
-        
-    }
-  }
+  
+  
+  
+  const size = useMemo(() => {
+    return props.isFullScreen ? 'w-screen h-screen' : 'lg:w-1/2 md:w-1/2 sm:w-full '
+
+  }, [props.isFullScreen])
   return (
     <>
       {isOpen && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
           <div className="fixed inset-0 bg-black opacity-50"></div>
-          <div className="bg-white p-8 rounded-lg z-10 w-screen h-screen">
+          <div className={`bg-white p-8 rounded-lg z-10 ${size}`}>
             <button
               className="absolute top-0 right-0 m-4 text-gray-500 hover:text-gray-700"
               onClick={closeModal}
@@ -53,13 +55,7 @@ const Modal = (props:Props) => {
               </svg>
             </button>
             {children}
-            <div className=' flex flex-row'>
-                <div className=' w-1/2'>
-                    <Button text={'Confirm'} onClick={()=>alert('hi')}/>
-                </div>
-            </div>
           </div>
-          
         </div>
       )}
     </>

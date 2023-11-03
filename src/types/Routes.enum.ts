@@ -12,5 +12,7 @@ export enum Routes {
     DRIVER = '/driver',
     CREATE_DRIVER = '/createdriver',
     DRIVER_DASHBOARD = '/driverdashboard',
-    OWNER_TRANSACTION = '/ownertransaction'
+    OWNER_TRANSACTION = '/ownertransaction',
+    DRIVERS='/drivers',
+
 }
