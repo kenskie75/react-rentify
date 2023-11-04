@@ -1,4 +1,4 @@
-import axiosInstance from "../utils/axiosInstance"
+import axiosInstance from "../utils/axiosInstance";
 
 const headers = {
     "Content-Type":"text/plain"
@@ -12,6 +12,12 @@ export const createBooking = async(payload:any) =>{
 
 export const getBookingByStatus = async(user_id:string,status:string)=>{
     const response = await axiosInstance.get(`bookings/getbookingbystatus/${user_id}/${status}`)
+
+    return response.data;
+}
+
+export const getBookingByRefId = async(refId:string)=>{
+    const response = await axiosInstance.get(`bookings/getbookingbyrefid/${refId}`);
 
     return response.data;
 }

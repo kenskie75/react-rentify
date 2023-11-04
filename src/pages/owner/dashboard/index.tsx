@@ -1,6 +1,6 @@
-import React, { useMemo } from 'react'
-import { Container } from '../../../component'
-import useGetAccountFromStorage from '../../../hooks/useGetAccountFromStorage'
+import { useMemo } from 'react';
+import { Container } from '../../../component';
+import useGetAccountFromStorage from '../../../hooks/useGetAccountFromStorage';
 import { formatFullName } from '../../../utils/string';
 import CardOptions from './components/CardOptions';
 import { Routes } from '../../../types/Routes.enum';
@@ -24,7 +24,7 @@ const OPTION = [
   {
     title:'Bookings',
     icon:BOOKINGS,
-    redirect:Routes.DRIVER
+    redirect:Routes.BOOKINGS
   },
   {
     title:'Transactions',

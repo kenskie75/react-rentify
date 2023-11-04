@@ -14,5 +14,6 @@ export enum Routes {
     DRIVER_DASHBOARD = '/driverdashboard',
     OWNER_TRANSACTION = '/ownertransaction',
     DRIVERS='/drivers',
-
+    BOOKINGS = '/bookings',
+    BOOKING = '/booking'
 }

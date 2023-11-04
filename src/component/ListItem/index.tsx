@@ -1,11 +1,13 @@
 type Props = {
     label:string;
     value:string;
-}
+  
+  }
 
 export default function ListItem(props:Props) {
+
   return (
-    <div className=' w-full flex py-1'>
+    <div className=" flex flex-row py-2">
         <div className=" flex flex-1">
             <p className=" font-bold">{props.label}</p>
         </div>

@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import useGetAccountFromStorage from '../useGetAccountFromStorage';
+import { useCallback, useEffect, useState } from 'react';
 import { getBookingByStatus } from '../../services/BookingsService.service';
 import useAlertOption from '../useAlertOption';
+import { getDataFromStorage } from '../../utils/storage';
 
 type Params = {
     status:string;
@@ -9,13 +9,13 @@ type Params = {
 
 export default function useGetBookingsByStatus(props:Params) {
     const [data,setData] = useState<any>([]);
-    const {user} = useGetAccountFromStorage();
     const {status} = props;
     const {alertError} = useAlertOption();
 
     const sendRequest = useCallback(
       async() => {
         try {
+          const user = await getDataFromStorage('account');
             if(!user){
                 return;
             }
@@ -26,7 +26,7 @@ export default function useGetBookingsByStatus(props:Params) {
             alertError();
         }
       },
-      [alertError, status, user],
+      [status],
     )
     
   
