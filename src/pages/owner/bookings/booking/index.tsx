@@ -25,6 +25,11 @@ export default function Booking() {
     const {alertWarning,alertSuccess} = useAlertOption();
 
     const displayDriver = useMemo(()=>{
+        if(!user){
+            return;
+        }
+
+        
         if(selectedDriver){
             return(
             <div className=" w-full font-bold">
@@ -35,7 +40,7 @@ export default function Booking() {
         }
         
 
-        if(!data?.driver){
+        if(!data?.driver_id && data?.user_type !== 'RENTER'){
             return driversList?.map((val:any,i:number)=>(
                 <div className=" w-full border-b border-b-slate-300 py-3 px-5 flex flex-row bg-slate-200">
                     <div className=" flex flex-1 flex-col">
@@ -56,7 +61,7 @@ export default function Booking() {
             </div>
         );
 
-    },[data?.driver,driversList,selectedDriver])
+    },[data?.driver?.firstName, data?.driver?.lastName, data?.driver?.middleName, data?.driver?.username, data?.driver_id, data?.user_type, driversList, selectedDriver, user])
 
     const handleAccept = useCallback(async()=>{
         try {
