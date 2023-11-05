@@ -29,6 +29,9 @@ export default function Booking() {
             return;
         }
 
+        if(data?.driver === null && user?.user_type === 'RENTER'){
+            return <p>No Driver wait for the owner assign it</p>;
+        }
         
         if(selectedDriver){
             return(
@@ -40,7 +43,8 @@ export default function Booking() {
         }
         
 
-        if(!data?.driver_id && data?.user_type !== 'RENTER'){
+        if(!data.driver &&  user?.user_type === 'OWNER'){
+           
             return driversList?.map((val:any,i:number)=>(
                 <div className=" w-full border-b border-b-slate-300 py-3 px-5 flex flex-row bg-slate-200">
                     <div className=" flex flex-1 flex-col">
@@ -53,7 +57,7 @@ export default function Booking() {
                 </div>
             ))
         }
-
+     
         return (
             <div className=" w-full">
                 <p className=" font-bold">{data?.driver?.username}</p>
@@ -61,8 +65,8 @@ export default function Booking() {
             </div>
         );
 
-    },[data?.driver?.firstName, data?.driver?.lastName, data?.driver?.middleName, data?.driver?.username, data?.driver_id, data?.user_type, driversList, selectedDriver, user])
-
+    },[data?.driver, data?.user_type, driversList, selectedDriver, user])
+    console.log('user',user)
     const handleAccept = useCallback(async()=>{
         try {
             if(!selectedDriver){
