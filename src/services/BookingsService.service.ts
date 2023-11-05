@@ -21,3 +21,34 @@ export const getBookingByRefId = async(refId:string)=>{
 
     return response.data;
 }
+
+export const acceptTransactions = async(payload:any)=>{
+    const response = await axiosInstance.post('bookings/accept',payload,{headers});
+
+    return response.data;
+}
+
+export const getDataByDriverId = async(driverId:string)=>{
+    const response = await axiosInstance.get(`bookings/bookingbydriver/${driverId}`);
+
+    return response.data;
+}
+
+export const updateBookingStatus = async(refId:string,status:string)=>{
+    const response = await axiosInstance.post(`bookings/updatestatus/${refId}/${status}`);
+
+    return response.data;
+}
+
+export const getBookingByCustomer = async(userId:string)=>{
+    const response = await axiosInstance.get(`bookings/getbookingbycustomer/${userId}`);
+
+    return response.data;
+}
+
+export const getTransactionsByOwner = async(userid:string)=>{
+    const response = await axiosInstance.get(`bookings/gettransactionbyowner/${userid}`)
+
+
+    return response.data;
+}

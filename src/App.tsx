@@ -11,6 +11,7 @@ import UnAuth from './RouterComponents/UnAuth';
 import Renter from './RouterComponents/Renter';
 import ModalContextProvider from './context/ModalContext/ModalContext';
 import Owner from './RouterComponents/Owner';
+import DriverRoute from './RouterComponents/DriverRoute';
 
 
 function App() {
@@ -29,8 +30,8 @@ function App() {
     if(isLoading){
       return loading();
     }
-    
-    if(user === undefined){
+
+    if(user === null || user=== undefined){
       return <UnAuth/>
     }
 
@@ -43,6 +44,10 @@ function App() {
       if(user.user_type === 'OWNER'){
         return <Owner/>
       }
+
+      return(
+        <DriverRoute/>
+      );
     }
    
   },[user,isLoading])

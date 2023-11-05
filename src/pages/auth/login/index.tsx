@@ -13,11 +13,9 @@ export default function Login() {
   const [username,setUsername] = useState<string>('');
   const [password,setPassword] = useState<string>('');
   const {alertWarning,alertError} = useAlertOption(); 
-  const {isOpen,setIsOpen,setContent,setIsFullScreen} = useModalContext();
 
   async function handleLogin(){
     try {
-      setIsOpen(!isOpen)
       if(!username){
         alertWarning(dataIsRequired('Username'));
         return;

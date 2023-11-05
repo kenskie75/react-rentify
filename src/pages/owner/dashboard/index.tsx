@@ -29,7 +29,7 @@ const OPTION = [
   {
     title:'Transactions',
     icon:TRANSACTIONS,
-    redirect:Routes.DRIVER
+    redirect:Routes.TRANSACTIONS
   }
 
 ];

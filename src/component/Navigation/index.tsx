@@ -2,10 +2,11 @@
 import { MdOutlineLogout } from 'react-icons/md';
 import { Routes } from "../../types/Routes.enum";
 import { useEffect, useMemo, useState } from "react";
+import { useLocation } from 'react-router-dom';
 
 export default  function Navigation() {
     const [user,setUser] = useState<any>(null);
-
+    const location = useLocation();
     async function handleLogout(){
         await localStorage.clear();
 
@@ -75,10 +76,15 @@ export default  function Navigation() {
         }
 
         return(<>
-        <a href={Routes.REGISTER_OWNER}>
-            <li className=" text-white px-4">
-                Become a Owner
-            </li>
+            <a href={Routes.REGISTER_OWNER}>
+                <li className=" text-white px-4">
+                    Become a Owner
+                </li>
+            </a>
+            <a href={Routes.TRANSACTIONS}>
+                <li className=" text-white px-4">
+                    Transactions
+                </li>
             </a>
             <a href={Routes.LOGIN}  className=" text-white px-4 hover:text-slate-300" >
                 {user?.username}
@@ -91,8 +97,16 @@ export default  function Navigation() {
     useEffect(()=>{
         getUser()
     },[])
+
+    const displayNav = useMemo(()=>{
+        if(location.pathname.split('/')[1] === 'viewmaps' || location.pathname.split('/')[1] === 'show-maps'){
+            return 'hidden';
+        }
+
+        return ' p-3 bg-black flex fixed w-screen z-30'
+    },[location])
     return (
-    <nav className=' p-3 bg-black flex fixed w-screen z-30'>
+    <nav className={displayNav}>
         <ul className=" px-4">
             <li className=" p-3 text-white font-bold text-xl">
                 Rentify

@@ -1,5 +1,6 @@
 
 
+import { useMemo } from "react";
 import { Button } from "../../../../component";
 import { configVariable } from "../../../../constant/ConfigVariable";
 import { Routes } from "../../../../types/Routes.enum";
@@ -12,13 +13,23 @@ export type Props = {
     ownerName:string;
     price:string;
     description:string;
+    isRenter?:boolean;
 }
 
 
 
 export default function TransactionCard
 (props:Props) {
-    const {image,vehicleName,ownerName,price,description,refId} = props;
+    const {image,vehicleName,ownerName,price,description,refId,isRenter} = props;
+
+    const displayName = useMemo(() => {
+        if(!isRenter){
+            return 'Owner Name';
+        }
+    
+        return 'Renter Name';
+    }, [isRenter])
+  
     return (
     <div className=' border-b border-b-gray-500 w-full flex flex-row'>
         <div className=' flex flex-1'>
@@ -27,7 +38,7 @@ export default function TransactionCard
                 <h1 className='  mt-5 text-lg'>{vehicleName}</h1>
                 <h2 className=' '>{description}</h2>
                 <p> &#x20B1; {price}</p>
-                <p className=' font-bold '>Customer Name : <span className=' font-semibold'>{ownerName}</span></p>
+                <p className=' font-bold '>{displayName} : <span className=' font-semibold'>{ownerName}</span></p>
                 <div className=' h-5'/>
                 <Button text={'View Transaction'} onClick={()=>window.location.href=`${Routes.BOOKING}/${refId}`}/>
             </div>

@@ -7,7 +7,7 @@ type Params = {
 
 export default function useGetDriversByUserId(params:Params) {
     const {userId} = params
-    const [data,setData] = useState<any[]>()
+    const [data,setData] = useState<any>()
   
     const sendRequest = useCallback(
       async() => {

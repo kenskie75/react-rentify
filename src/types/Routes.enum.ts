@@ -15,5 +15,10 @@ export enum Routes {
     OWNER_TRANSACTION = '/ownertransaction',
     DRIVERS='/drivers',
     BOOKINGS = '/bookings',
-    BOOKING = '/booking'
+    BOOKING = '/booking',
+    DRIVER_USER = '/driver',
+    DRIVER_VIEW_TRANSACTION = '/view_transactions',
+    DRIVER_VIEW_MAPS = '/viewmaps',
+    TRANSACTIONS = '/transactions',
+    SHOW_MAPS = '/show-maps'
 }

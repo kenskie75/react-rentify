@@ -8,6 +8,9 @@ import Drivers from '../../pages/owner/drivers';
 import AddDriver from '../../pages/owner/drivers/AddDriver';
 import Bookings from '../../pages/owner/bookings';
 import Booking from '../../pages/owner/bookings/booking';
+import ViewDestinationMaps from '../../pages/owner/bookings/ViewDestinationMaps';
+import Transactions from '../../pages/owner/transactions';
+
 
 
 export default function Owner() {
@@ -41,6 +44,15 @@ export default function Owner() {
           path={`${Routes.BOOKING}/:id`}
           element={<Booking/>}
         />
+        <Route
+          path={`${Routes.SHOW_MAPS}/:id`}
+          element={<ViewDestinationMaps/>}
+        />
+        <Route
+          path={`${Routes.TRANSACTIONS}`}
+          element={<Transactions/>}
+        />
+  
     </ReactRoutes>
   )
 }

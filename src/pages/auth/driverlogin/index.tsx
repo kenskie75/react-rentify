@@ -39,7 +39,7 @@ async function handleLogin(){
             text:'Successfully Login'
           }).then(e=>{
             if(e.isConfirmed){
-              window.location.href=Routes.DRIVER_DASHBOARD
+              window.location.href=Routes.DRIVER_USER
             }
           })
         } catch (error) {
