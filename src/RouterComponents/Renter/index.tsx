@@ -1,10 +1,11 @@
-import Vehicles from '../../pages/customer/vehicles'
-import { Routes as ReactRoutes,Route } from 'react-router-dom';
+import Vehicles from '../../pages/customer/vehicles';
+import { Routes as ReactRoutes, Route } from 'react-router-dom';
 import { Routes } from '../../types/Routes.enum';
 import Vehicle from '../../pages/customer/vehicles/vehicle/inde';
 import MyTransactions from '../../pages/customer/mytransactions';
 import Booking from '../../pages/owner/bookings/booking';
 import ViewDestinationMaps from '../../pages/owner/bookings/ViewDestinationMaps';
+import RegisterOwner from '../../pages/customer/registerowner';
 
 export default function Renter() {
   return (
@@ -26,6 +27,10 @@ export default function Renter() {
         <Route
           path={`${Routes.SHOW_MAPS}/:id`}
           element={<ViewDestinationMaps/>}
+        />
+        <Route
+          path={Routes.REGISTER_OWNER}
+          element={<RegisterOwner/>}
         />
     </ReactRoutes>
   )

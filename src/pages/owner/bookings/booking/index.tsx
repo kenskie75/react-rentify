@@ -1,4 +1,4 @@
-import { Route, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Button, Container, ListItem } from "../../../../component";
 import useGetBookingsByRefId from "../../../../hooks/bookings/useGetBookingsByRefId";
 import { formatFullName } from "../../../../utils/string";
@@ -43,7 +43,7 @@ export default function Booking() {
         }
         
 
-        if(!data.driver &&  user?.user_type === 'OWNER'){
+        if(!data?.driver &&  user?.user_type === 'OWNER'){
            
             return driversList?.map((val:any,i:number)=>(
                 <div className=" w-full border-b border-b-slate-300 py-3 px-5 flex flex-row bg-slate-200">
