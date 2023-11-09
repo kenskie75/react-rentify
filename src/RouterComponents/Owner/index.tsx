@@ -10,6 +10,7 @@ import Bookings from '../../pages/owner/bookings';
 import Booking from '../../pages/owner/bookings/booking';
 import ViewDestinationMaps from '../../pages/owner/bookings/ViewDestinationMaps';
 import Transactions from '../../pages/owner/transactions';
+import Profile from '../../pages/profile';
 
 
 
@@ -52,7 +53,10 @@ export default function Owner() {
           path={`${Routes.TRANSACTIONS}`}
           element={<Transactions/>}
         />
-  
+        <Route
+          path={Routes.PROFILE}
+          element={<Profile/>}
+        />
     </ReactRoutes>
   )
 }

@@ -3,15 +3,11 @@ import { MdOutlineLogout } from 'react-icons/md';
 import { Routes } from "../../types/Routes.enum";
 import { useEffect, useMemo, useState } from "react";
 import { useLocation } from 'react-router-dom';
-
+import Swal from 'sweetalert2';
 export default  function Navigation() {
     const [user,setUser] = useState<any>(null);
     const location = useLocation();
-    async function handleLogout(){
-        await localStorage.clear();
-
-        window.location.href=Routes.HOME
-    }
+ 
 
     const getUser = async()=>{
         const data = await localStorage.getItem('account');
@@ -22,6 +18,24 @@ export default  function Navigation() {
 
         setUser(userData)
     }
+    const logout = async() =>{
+        await localStorage.clear();
+        window.location.href=Routes.HOME;
+     }
+ 
+ 
+   function handleLogout(){
+     Swal.fire({
+         title:'Confirmation',
+         text:'Are you sure do want to logout?',
+         confirmButtonText:'Yes',
+         showCancelButton:true
+     }).then((e)=>{
+         if(e.isConfirmed){
+           logout();
+         }    
+     })
+   }
 
     const displayUser = useMemo(()=>{
         if(!user){
@@ -68,7 +82,7 @@ export default  function Navigation() {
                         Drivers
                     </li>
                 </a>
-                <a href={Routes.LOGIN}  className=" text-white px-4 hover:text-slate-300" >
+                <a href={Routes.PROFILE}  className=" text-white px-4 hover:text-slate-300" >
                         {user?.username}
                 </a>
                 <p className=' text-white px-4 hover:text-slate-300 text-xl' onClick={handleLogout}><MdOutlineLogout/></p>
@@ -86,7 +100,7 @@ export default  function Navigation() {
                     Transactions
                 </li>
             </a>
-            <a href={Routes.LOGIN}  className=" text-white px-4 hover:text-slate-300" >
+            <a href={Routes.PROFILE}  className=" text-white px-4 hover:text-slate-300" >
                 {user?.username}
             </a>
             <p className=' text-white px-4 hover:text-slate-300 text-xl' onClick={handleLogout}><MdOutlineLogout/></p>
@@ -99,12 +113,15 @@ export default  function Navigation() {
     },[])
 
     const displayNav = useMemo(()=>{
-        if(location.pathname.split('/')[1] === 'viewmaps' || location.pathname.split('/')[1] === 'show-maps'){
+
+        if(location.pathname.split('/')[1] === 'viewmaps' || location.pathname.split('/')[1] === 'show-maps' || user?.user_type === 'ADMIN'){
             return 'hidden';
+        }else{
+            return ' p-3 bg-black flex fixed w-screen z-30'
         }
 
-        return ' p-3 bg-black flex fixed w-screen z-30'
-    },[location])
+       
+    },[location,user])
     return (
     <nav className={displayNav}>
         <ul className=" px-4">

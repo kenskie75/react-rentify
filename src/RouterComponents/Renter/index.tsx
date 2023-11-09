@@ -6,6 +6,7 @@ import MyTransactions from '../../pages/customer/mytransactions';
 import Booking from '../../pages/owner/bookings/booking';
 import ViewDestinationMaps from '../../pages/owner/bookings/ViewDestinationMaps';
 import RegisterOwner from '../../pages/customer/registerowner';
+import Profile from '../../pages/profile';
 
 export default function Renter() {
   return (
@@ -31,6 +32,10 @@ export default function Renter() {
         <Route
           path={Routes.REGISTER_OWNER}
           element={<RegisterOwner/>}
+        />
+        <Route
+          path={Routes.PROFILE}
+          element={<Profile/>}
         />
     </ReactRoutes>
   )

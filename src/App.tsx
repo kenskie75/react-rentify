@@ -1,17 +1,14 @@
-import { BrowserRouter,Routes as ReactRoutes,Route } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import './App.css';
-import { Button, Navigation } from './component';
-import { Routes } from './types/Routes.enum';
-import {  useMemo } from 'react';
+import { Navigation } from './component';
+import { useMemo } from 'react';
 import useGetAccountFromStorage from './hooks/useGetAccountFromStorage';
-import DriverLogin from './pages/auth/driverlogin';
-import Register from './pages/auth/register';
-import Cvehicles from './pages/customer/vehicles';
 import UnAuth from './RouterComponents/UnAuth';
 import Renter from './RouterComponents/Renter';
 import ModalContextProvider from './context/ModalContext/ModalContext';
 import Owner from './RouterComponents/Owner';
 import DriverRoute from './RouterComponents/DriverRoute';
+import AdminRoute from './RouterComponents/AdminRoute';
 
 
 function App() {
@@ -31,10 +28,15 @@ function App() {
       return loading();
     }
 
-    if(user === null || user=== undefined){
+    if(user=== undefined){
+      return loading();
+    }
+    
+    if(user === null){
       return <UnAuth/>
     }
 
+ 
     if(user){
     
       if(user.user_type === 'RENTER'){
@@ -45,6 +47,11 @@ function App() {
         return <Owner/>
       }
 
+      if(user.user_type === 'ADMIN'){
+        return <AdminRoute/>
+      }
+
+    
       return(
         <DriverRoute/>
       );
