@@ -8,11 +8,12 @@ import { updateToOwner } from '../../../services/UserService';
 
 import Swal from 'sweetalert2';
 import { Routes } from '../../../types/Routes.enum';
+import useGetAccountFromStorage from '../../../hooks/useGetAccountFromStorage';
 export default function RegisterOwner() {
   const [img,setImg] = useState<any>(null);
   const [docsType,setDocsType] = useState<string>('');
-  const {alertWarning,alertError,alertSuccess} = useAlertOption();
-
+  const {alertWarning,alertError,} = useAlertOption();
+  const {user:account} = useGetAccountFromStorage();
   
   const displayImage = useMemo(()=>{
     if(!img){
@@ -26,6 +27,14 @@ export default function RegisterOwner() {
     );
   },[img])
   
+  async function updateUserStatus(user:any){
+    const payload = {
+      ...user,user_status:3
+    }
+
+    const stringData = JSON.stringify(payload)
+    localStorage.setItem('account',stringData)
+  }
   async function handleSubmit(){
     try {
         const user = await localStorage.getItem('account');
@@ -61,10 +70,12 @@ export default function RegisterOwner() {
         const respData = JSON.stringify(data);
         localStorage.setItem('account',respData);
         Swal.fire({
-          title:'Success',
-          text:'Successfully register as owner'
+          icon:'success',
+          title:'Success Requested',
+          text:'Please wait for admin to accept your request'
         }).then(e=>{
           if(e.isConfirmed){
+            updateUserStatus(userInfo)
             window.location.href=Routes.HOME
           }
         })
@@ -74,10 +85,18 @@ export default function RegisterOwner() {
     }
   }
 
-  return (
-    <div className=' pt-28 flex justify-center items-center mb-14'>
-        <div className=' bg-white w-1/2 p-8'>
-            <h1 className=' font-bold text-xl'>Become Vehicle Owner</h1>
+  const displayContent = useMemo(()=>{
+    if(account?.user_type === 'RENTER' && account?.user_status.toString() === '3'){
+      return (
+        <div>
+          <h1 className=' text-lg font-bold text-center'>Please wait for admin accept your request</h1>
+        </div>
+      );
+    }
+
+    return(
+      <div>
+          <h1 className=' font-bold text-xl'>Become Vehicle Owner</h1>
             <div className=' h-10'/>
             <div className=' flex justify-center'>
                 {displayImage}
@@ -88,7 +107,15 @@ export default function RegisterOwner() {
             <TextInput label='Document Type' onChange={(e)=>setDocsType(e.target.value)}/>
             <div className=' h-10'/>
             <Button text='Submit' onClick={()=>handleSubmit()}/>
-        </div>
+
+      </div>
+    );
+  },[account?.user_status, account?.user_type, displayImage,setImg,setDocsType,img,docsType]);
+  return (
+    <div className=' pt-28 flex justify-center items-center mb-14'>
+        <div className=' bg-white w-1/2 p-8'>
+          {displayContent}
+         </div>
     </div>
   )
 }

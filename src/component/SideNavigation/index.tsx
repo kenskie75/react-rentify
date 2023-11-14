@@ -28,16 +28,22 @@ const ITEM:SidebarItem[] = [
         title:'Vehicle',
         route:Routes.HOME,
         subitem:[],
+    },
+    {
+        title:'Owner Request',
+        route:Routes.OWNER_REQUEST,
+        subitem:[]
     }
-]
+
+];
 
 export default function SideNavigation(props:Props) {
 
     const displayItem = useMemo(()=>{
         return ITEM.map((val:any,index:number)=>(
-            <ItemList title={val.title} route={val.routes} subitem={val.subitem}/>
+            <ItemList title={val.title} route={val.route} subitem={val.subitem}/>
         ));
-    },[ITEM])
+    },[])
 
     const logout = async() =>{
        await localStorage.clear();

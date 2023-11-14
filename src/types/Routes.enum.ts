@@ -21,5 +21,6 @@ export enum Routes {
     DRIVER_VIEW_MAPS = '/viewmaps',
     TRANSACTIONS = '/transactions',
     SHOW_MAPS = '/show-maps',
-    PROFILE = '/profile'
+    PROFILE = '/profile',
+    OWNER_REQUEST = '/requests'
 }

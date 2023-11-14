@@ -12,7 +12,7 @@ export default function ItemList(props:Props) {
         }
 
         return props.subitem.map((val:SubType,i:number)=>(
-            <li className=" px-10 py-3 list-none text-white">
+            <li className=" px-10 py-3 list-none text-white cursor-pointer">
                 {val.title}
             </li>
         ))
@@ -30,7 +30,7 @@ export default function ItemList(props:Props) {
   
     return (
     <>
-    <li className=" px-6 py-3 text-white list-none w-full hover:bg-slate-800" onClick={()=>onClick()}>
+    <li className=" px-6 py-3 text-white list-none w-full hover:bg-slate-800 cursor-pointer" onClick={()=>onClick()}>
        {props.title}
     </li>
     <nav>
