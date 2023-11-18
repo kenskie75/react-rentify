@@ -4,6 +4,8 @@ import { Routes } from '../../types/Routes.enum';
 import AdminDashboard from '../../pages/admin/admindashboard';
 import SideNavigation from '../../component/SideNavigation';
 import Requests from '../../pages/admin/Requests';
+import Categories from '../../pages/admin/Categories';
+import Subscription from '../../pages/admin/Subscription';
 
 export default function AdminRoute() {
   return (
@@ -19,7 +21,8 @@ export default function AdminRoute() {
           path={Routes.OWNER_REQUEST}
           element={<Requests/>}
         />
-       
+        <Route path={Routes.CATEGORIES} element={<Categories/>}/>
+        <Route path={Routes.SUBSCRIPTION} element={<Subscription/>}/>
     </ReactRoutes>
     </SideNavigation>
     </>

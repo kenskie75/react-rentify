@@ -22,5 +22,7 @@ export enum Routes {
     TRANSACTIONS = '/transactions',
     SHOW_MAPS = '/show-maps',
     PROFILE = '/profile',
-    OWNER_REQUEST = '/requests'
+    OWNER_REQUEST = '/requests',
+    CATEGORIES = '/categories',
+    SUBSCRIPTION = '/subscription'
 }

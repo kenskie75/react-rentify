@@ -1,18 +1,18 @@
 
 import Swal from "sweetalert2";
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { TextInput, Button, ModalContent } from "../../../component";
+import { useState } from "react";
+import { TextInput, Button } from "../../../component";
 import { dataIsRequired } from "../../../constant/String";
 import { userLogin } from "../../../services/UserService";
 import useAlertOption from "../../../hooks/useAlertOption";
 import { Routes } from "../../../types/Routes.enum";
-import { useModalContext } from "../../../context/ModalContext/ModalContext";
+import { useLoadingContext } from "../../../context/LoadingContext/LoadingContext";
 
 export default function Login() {
   const [username,setUsername] = useState<string>('');
   const [password,setPassword] = useState<string>('');
   const {alertWarning,alertError} = useAlertOption(); 
+  const {openLoading,handleCloseLoading,loading} = useLoadingContext();
 
   async function handleLogin(){
     try {
@@ -25,7 +25,7 @@ export default function Login() {
         alertWarning(dataIsRequired('Password'));
         return;
       }
-
+      openLoading();
       const payload = {
         username,
         password
@@ -39,6 +39,10 @@ export default function Login() {
 
       const userData = JSON.stringify(data);
       localStorage.setItem('account',userData);
+      handleCloseLoading();
+      if(loading){
+        return;
+      }
       Swal.fire({
         icon:'success',
         title:'Success',
@@ -49,8 +53,10 @@ export default function Login() {
         }
       })
     } catch (error) {
-      
+      alertError();
     }
+     
+    
   }
   
   return (

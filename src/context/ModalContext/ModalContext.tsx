@@ -1,4 +1,3 @@
-import { getValue } from "@testing-library/user-event/dist/utils";
 import { createContext, useContext, useState } from "react";
 import { Modal } from "../../component";
 

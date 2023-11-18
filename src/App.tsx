@@ -9,6 +9,7 @@ import ModalContextProvider from './context/ModalContext/ModalContext';
 import Owner from './RouterComponents/Owner';
 import DriverRoute from './RouterComponents/DriverRoute';
 import AdminRoute from './RouterComponents/AdminRoute';
+import LoadingContextProvider from './context/LoadingContext/LoadingContext';
 
 
 function App() {
@@ -61,12 +62,15 @@ function App() {
 
   return (
    <>
+   <LoadingContextProvider>
    <ModalContextProvider>
     <BrowserRouter>
       <Navigation/>
-      {checkRoutes}     
+      {checkRoutes}    
+ 
     </BrowserRouter>
     </ModalContextProvider>
+    </LoadingContextProvider>
    </>
    
   );

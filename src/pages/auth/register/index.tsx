@@ -1,13 +1,16 @@
 
-
-
 import Swal from 'sweetalert2';
 import { TextInput, Select, Button } from '../../../component';
 import useAlertOption from '../../../hooks/useAlertOption';
-import { register } from '../../../services/UserService';
+import { register, sendVerificationCode } from '../../../services/UserService';
 import { SelectInputOption } from '../../../types/SelectOptionType.type';
 import useValidateRegisterInfo from './hooks/useValidateRegisterInfo';
 import { Routes } from '../../../types/Routes.enum';
+import { useModalContext } from '../../../context/ModalContext/ModalContext';
+import { useState } from 'react';
+import UserVerification from './UserVerification';
+import { useLoadingContext } from '../../../context/LoadingContext/LoadingContext';
+import { generateSixDigitNumber } from '../../../utils/string';
 
 
 const genderOption:SelectInputOption[] = [
@@ -22,17 +25,40 @@ const genderOption:SelectInputOption[] = [
 ];
 
 function Register() {
-
-    const {validateRegisterInfo,firstName,setFirstName,middleName,setMiddleName,lastName,setLastName,username,setUsername,password,setPasssword,confirmPassword,setConfirmPassword,birthdate,setBirthdate,mobileNumber,setMobileNumber,email,setEmail,address,setAddress,gender,setGender} = useValidateRegisterInfo();
-    const {alertError} = useAlertOption();
+    const [code,setCode] = useState<string>('');
+    const [inputedCode,setInputedCode] = useState<string>("");
+    const {handleCloseLoading,openLoading} = useLoadingContext();
+    const alert = useAlertOption();
+    const {
+        validateRegisterInfo,
+        firstName,
+        setFirstName,
+        middleName,
+        setMiddleName,
+        lastName,
+        setLastName,
+        username,
+        setUsername,
+        password,
+        setPasssword,
+        confirmPassword,
+        setConfirmPassword,
+        birthdate,
+        setBirthdate,
+        mobileNumber,
+        setMobileNumber,
+        email,
+        setEmail,
+        address,
+        setAddress,
+        gender,
+        setGender
+    } = useValidateRegisterInfo();
+    const {setIsOpen,setContent} = useModalContext();
+    const {alertError} =alert;
     async function handleRegister(){
-       
         try {
-            
-            if(!validateRegisterInfo()){
-                return;
-            }
-
+            openLoading();
             const payload = {
                 userName:username,
                 password,
@@ -62,8 +88,41 @@ function Register() {
             alertError()
         } catch (error) {
             alertError()
+        }finally{
+            handleCloseLoading();
         }
   
+    }
+
+    console.log(inputedCode)
+    async function handleOpenVerifcationModal(){
+       
+        try {
+
+            if(!validateRegisterInfo()){
+                return;
+            }
+            openLoading();
+            const generatedCode = generateSixDigitNumber();
+            setCode(generatedCode.toString())
+            const payload = {
+                code:generatedCode.toString(),
+                email
+            }
+            const resp = await sendVerificationCode(payload);
+
+            if(resp.status.toString() === "1"){
+                setContent(<UserVerification alert={alert} verficationCode={generatedCode.toString()} email={email} setIsOpen={setIsOpen} handleRegister={handleRegister}/>);
+                setIsOpen(true)
+                return;
+            }
+
+            alertError();
+        } catch (error) {
+            alertError();
+        }finally{
+            handleCloseLoading();
+        }
     }
 
     return (
@@ -105,7 +164,7 @@ function Register() {
             <div className=' h-5'/>
             <TextInput label='Address' value={address} onChange={(e)=>setAddress(e.target.value)}/>
             <div className=' h-8'/>
-            <Button text='Sign Up' onClick={handleRegister}/>
+            <Button text='Sign Up' onClick={handleOpenVerifcationModal}/>
             <p className=' mt-5 text-center'>Already have account? <a href={Routes.LOGIN} className=' text-blue-600'>Login</a></p>
         </div>
     </div>

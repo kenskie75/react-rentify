@@ -1,5 +1,4 @@
 
-import axios from 'axios';
 import axiosInstance from '../utils/axiosInstance';
 const headers = {
     'Content-Type':'text/plain'
@@ -30,6 +29,12 @@ export const getuserbystatus = async(status:string)=>{
 
 export const approvedRequest = async(userId:string)=>{
     const resp = await axiosInstance.post(`user/approvedowner/${userId}`);
+
+    return resp.data;
+}
+
+export const sendVerificationCode = async(payload:any)=>{
+    const resp = await axiosInstance.post(`user/verification`,payload,{headers});
 
     return resp.data;
 }

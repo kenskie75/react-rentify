@@ -15,7 +15,7 @@ const ITEM:SidebarItem[] = [
         subitem:[],
     },
     {
-        title:'User',
+        title:'User Management',
         route:Routes.HOME,
         subitem:[
             {
@@ -25,7 +25,7 @@ const ITEM:SidebarItem[] = [
         ],
     },
     {
-        title:'Vehicle',
+        title:'Vehicle Management',
         route:Routes.HOME,
         subitem:[],
     },
@@ -33,7 +33,17 @@ const ITEM:SidebarItem[] = [
         title:'Owner Request',
         route:Routes.OWNER_REQUEST,
         subitem:[]
-    }
+    },
+    {
+        title:'Category Management',
+        route:Routes.CATEGORIES,
+        subitem:[]
+    },
+    {
+        title:'Subscription Management',
+        route:Routes.SUBSCRIPTION,
+        subitem:[]
+    },
 
 ];
 
