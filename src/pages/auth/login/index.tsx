@@ -39,7 +39,6 @@ export default function Login() {
 
       const userData = JSON.stringify(data);
       localStorage.setItem('account',userData);
-      handleCloseLoading();
       if(loading){
         return;
       }
@@ -54,6 +53,8 @@ export default function Login() {
       })
     } catch (error) {
       alertError();
+    }finally{
+      handleCloseLoading();
     }
      
     

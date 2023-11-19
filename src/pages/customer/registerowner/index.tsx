@@ -86,7 +86,7 @@ export default function RegisterOwner() {
   }
 
   const displayContent = useMemo(()=>{
-    if(account?.user_type === 'RENTER' && account?.user_status.toString() === '3'){
+    if(account?.user_type === 'RENTER' && account?.user_status?.toString() === '3'){
       return (
         <div>
           <h1 className=' text-lg font-bold text-center'>Please wait for admin accept your request</h1>
