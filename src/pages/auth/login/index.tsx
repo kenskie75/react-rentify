@@ -7,6 +7,7 @@ import { userLogin } from "../../../services/UserService";
 import useAlertOption from "../../../hooks/useAlertOption";
 import { Routes } from "../../../types/Routes.enum";
 import { useLoadingContext } from "../../../context/LoadingContext/LoadingContext";
+import { generateNonce } from "../../../utils/string";
 
 export default function Login() {
   const [username,setUsername] = useState<string>('');
@@ -55,9 +56,14 @@ export default function Login() {
       alertError();
     }finally{
       handleCloseLoading();
-    }
-     
-    
+    }    
+  }
+
+  function test(){
+    const nonce = generateNonce();
+  
+    console.log(nonce);
+  
   }
   
   return (

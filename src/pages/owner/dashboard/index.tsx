@@ -30,6 +30,11 @@ const OPTION = [
     title:'Transactions',
     icon:TRANSACTIONS,
     redirect:Routes.TRANSACTIONS
+  },
+  {
+    title:"Subscription",
+    icon:TRANSACTIONS,
+    redirect:Routes.SUBSCRIPTION,
   }
 
 ];

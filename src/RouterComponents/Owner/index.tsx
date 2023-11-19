@@ -11,6 +11,7 @@ import Booking from '../../pages/owner/bookings/booking';
 import ViewDestinationMaps from '../../pages/owner/bookings/ViewDestinationMaps';
 import Transactions from '../../pages/owner/transactions';
 import Profile from '../../pages/profile';
+import Subscription from '../../pages/owner/Subscription';
 
 
 
@@ -56,6 +57,10 @@ export default function Owner() {
         <Route
           path={Routes.PROFILE}
           element={<Profile/>}
+        />
+        <Route
+          path={Routes.SUBSCRIPTION}
+          element={<Subscription/>}
         />
     </ReactRoutes>
   )

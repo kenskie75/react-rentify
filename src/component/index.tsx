@@ -8,6 +8,7 @@ import ListItem from "./ListItem"
 import Modal from './Modal'
 import ModalContent from "./ModalContent"
 import Container from './Container';
+import ImageInput from "./ImageInput"
 
 export {
     Navigation,
@@ -19,5 +20,6 @@ export {
     ListItem,
     Modal,
     ModalContent,
-    Container
+    Container,
+    ImageInput
 }

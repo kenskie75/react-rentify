@@ -1,7 +1,7 @@
 'use client';
 import { useMemo, useState } from 'react';
 
-import { TextInput, Button } from '../../../component';
+import { TextInput, Button, ImageInput } from '../../../component';
 import { dataIsRequired } from '../../../constant/String';
 import useAlertOption from '../../../hooks/useAlertOption';
 import { updateToOwner } from '../../../services/UserService';
@@ -85,36 +85,39 @@ export default function RegisterOwner() {
     }
   }
 
-  const displayContent = useMemo(()=>{
-    if(account?.user_type === 'RENTER' && account?.user_status?.toString() === '3'){
-      return (
-        <div>
-          <h1 className=' text-lg font-bold text-center'>Please wait for admin accept your request</h1>
-        </div>
-      );
+  const onChangePic = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setImg(e.target.files[0]);
     }
-
-    return(
-      <div>
-          <h1 className=' font-bold text-xl'>Become Vehicle Owner</h1>
-            <div className=' h-10'/>
-            <div className=' flex justify-center'>
-                {displayImage}
-            </div>
-          
-            <input className=' ' type='file' onChange={(e)=> setImg(e?.target?.files?.[0])}/>
-            <div className=' h-10'/>
-            <TextInput label='Document Type' onChange={(e)=>setDocsType(e.target.value)}/>
-            <div className=' h-10'/>
-            <Button text='Submit' onClick={()=>handleSubmit()}/>
-
-      </div>
-    );
-  },[account?.user_status, account?.user_type, displayImage,setImg,setDocsType,img,docsType]);
+  };
+  console.log("IMAGE",img); 
   return (
     <div className=' pt-28 flex justify-center items-center mb-14'>
         <div className=' bg-white w-1/2 p-8'>
-          {displayContent}
+          {account?.user_type === 'RENTER' && account?.user_status?.toString() === '3' ? (
+            <div>
+             <h1 className=' text-lg font-bold text-center'>Please wait for admin accept your request</h1>
+           </div>
+          ):(
+            <div>
+            <h1 className=' font-bold text-xl'>Become Vehicle Owner</h1>
+              <div className=' h-10'/>
+              {/* <div className=' flex justify-center'>
+                  {displayImage}
+              </div>
+            
+              <input className=' ' type='file' onChange={(e)=> setImg(e?.target?.files?.[0])}/> */}
+              <div className=' flex justify-center'>
+                <ImageInput onChange={(e)=>onChangePic(e)} image={img}/>
+              </div>
+             
+              <div className=' h-10'/>
+              <TextInput label='Document Type' onChange={(e)=>setDocsType(e.target.value)}/>
+              <div className=' h-10'/>
+              <Button text='Submit' onClick={()=>handleSubmit()}/>
+  
+        </div>
+          )}
          </div>
     </div>
   )
