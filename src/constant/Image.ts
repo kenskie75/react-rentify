@@ -1,0 +1,1 @@
+export const GCASH = require('../assets/images/gcash.png');

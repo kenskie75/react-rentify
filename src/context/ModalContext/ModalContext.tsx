@@ -8,6 +8,7 @@ export type ModalContextType = {
     content:React.ReactNode;
     setContent:(content:React.ReactNode)=>void;
     setIsFullScreen:(setIsFullScreen:boolean)=>void;
+    setSize:(size:number)=>void;
 }
 
 export type Props = {
@@ -20,6 +21,7 @@ export default function  ModalContextProvider(props:Props){
     const [isOpen,setIsOpen] = useState<boolean>(false);
     const [content,setContent] = useState<React.ReactNode | null>(null);
     const [isFullScreen,setIsFullScreen] = useState<boolean>(false);
+    const [size,setSize] = useState<number |undefined>(undefined);
     
     function getValues(){
         return{
@@ -28,13 +30,14 @@ export default function  ModalContextProvider(props:Props){
             content,
             setContent,
             isFullScreen,
-            setIsFullScreen
+            setIsFullScreen,
+            setSize
         }
     }
 
     return(
         <ModalContext.Provider value={getValues()}>
-            <Modal isOpen={isOpen} setIsOpen={setIsOpen} isFullScreen={isFullScreen}>
+            <Modal isOpen={isOpen} setIsOpen={setIsOpen} customSize={size} isFullScreen={isFullScreen}>
                 {content}
             </Modal>
             {props.children}

@@ -26,3 +26,9 @@ export function generateNonce() {
   
     return combination;
   }
+
+export function displayMonth(noMonth:string){
+    const months = parseInt(noMonth);
+
+    return months < 2 ? 'month' : 'months';
+}

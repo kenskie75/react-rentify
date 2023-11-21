@@ -9,6 +9,7 @@ type Props = {
     children:React.ReactNode;
     isFullScreen?:boolean;
     onConfirm?:()=>void;
+    customSize?:number;
   }
 
 const Modal = (props:Props) => {
@@ -26,15 +27,18 @@ const Modal = (props:Props) => {
   
   
   const size = useMemo(() => {
-    return props.isFullScreen ? 'w-screen h-screen' : 'lg:w-1/2 md:w-1/2 sm:w-full '
+    if(props.customSize){
+      return ` w-[${props.customSize}]`;
+    }
+    return props.isFullScreen ? 'w-screen h-screen p-8' : 'lg:w-1/2 md:w-1/2 sm:w-full p-8'
 
-  }, [props.isFullScreen])
+  }, [props.customSize, props.isFullScreen])
   return (
     <>
       {isOpen && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
           <div className="fixed inset-0 bg-black opacity-50"></div>
-          <div className={`bg-white p-8 rounded-lg z-10 ${size}`}>
+          <div className={`bg-white  rounded-lg z-10 ${size}`}>
             <button
               className="absolute top-0 right-0 m-4 text-gray-500 hover:text-gray-700"
               onClick={closeModal}
