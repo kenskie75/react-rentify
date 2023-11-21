@@ -3,13 +3,40 @@ import useGetVehicleByUserId from "../../../hooks/vehicle/useGetVehicleByUserId"
 import { Routes } from "../../../types/Routes.enum";
 import { configVariable } from "../../../constant/ConfigVariable";
 import { Button } from "../../../component";
-
+import { getUserSubscription } from "../../../services/UserSubscription.service";
+import { getDataFromStorage } from "../../../utils/storage";
+import Swal from 'sweetalert2';
 
 ;
 export default function Vehicles() {
     const {data} = useGetVehicleByUserId();
-    function handleAddVehicle(){
-        window.location.href=Routes.ADD_VEHICLE
+    async function handleAddVehicle(){
+        const user = await getDataFromStorage('account')
+        if(!user){
+            return;
+        }
+        const resp = await getUserSubscription(user.user_id);
+
+        if(resp?.status?.toString() === '1'){
+            window.location.href=Routes.ADD_VEHICLE
+            return;
+        }else{
+            Swal.fire({
+                title:"Opps",
+                text:"You dont have subscription yet",
+                showCancelButton:true,
+                cancelButtonText:'Close',
+                cancelButtonColor:'red',
+                confirmButtonText:'Subscribe Now!'
+            }).then(res=>{
+                if(res.isConfirmed){
+                    window.location.href=Routes.VEHICLE;
+                }else{
+                    Swal.close();
+                }
+            })   
+        }
+        
     }
 
     const displayData = useMemo(() => {
