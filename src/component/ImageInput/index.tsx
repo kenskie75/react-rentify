@@ -31,7 +31,7 @@ export default function ImageInput(
         )
     },[image,onchange])
   return (
-    <div className="  h-80  w-80  relative bg-gray-300">
+    <div className="  h-32  w-32  relative bg-gray-300">
       {displayImage}
       <input
         type="file"

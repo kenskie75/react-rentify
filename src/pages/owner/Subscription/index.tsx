@@ -1,14 +1,15 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { Button, Container, ListItem } from '../../../component'
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Button, Container, ListItem } from '../../../component';
 import useAlertOption from '../../../hooks/useAlertOption';
 import { useLoadingContext } from '../../../context/LoadingContext/LoadingContext';
-import { getUserSubscription } from '../../../services/UserSubscription.service';
+import { getUserSubscription, subscribe } from '../../../services/UserSubscription.service';
 import { getDataFromStorage } from '../../../utils/storage';
 import { getSubscription } from '../../../services/SubscriptionService.service';
 import { useModalContext } from '../../../context/ModalContext/ModalContext';
 import { displayMonth } from '../../../utils/string';
 import useGetAccountFromStorage from '../../../hooks/useGetAccountFromStorage';
 import { GCASH } from '../../../constant/Image';
+import Swal from 'sweetalert2';
 
 export default function Subscription() {
     const [mySubscription,setMySubscription] = useState<any>(null);
@@ -62,6 +63,39 @@ export default function Subscription() {
         );
     }, [mySubscription]);
 
+    async function handlePay(amount:string,sub_id:string){
+      try {
+        const account = await getDataFromStorage('account');
+        if(!account){
+            return;
+        }
+        const payload = {
+            userId:account?.user_id,
+            amount:amount,
+            sub_id:sub_id
+        }
+        const resp = await subscribe(payload);
+        if(resp.status.toString() === '1'){
+            Swal.fire({
+                icon:'success',
+                title:"Successful",
+                text:'Successfully Subscribe'
+            }).then((x)=>{
+                if(x.isConfirmed){
+                    window.location.reload();
+                }
+            })
+            
+            return;
+        }
+
+        alertError();
+      } catch (error) {
+        alertError();
+      }  
+    }
+
+
     const paymentContent = (sub:any) =>{
         if(!user){
             return;
@@ -84,7 +118,7 @@ export default function Subscription() {
                     <p className=' text-center'>PHP {sub.price}</p>
                 </div>
                 <div className=' h-12'/>
-                <button className=' bg-blue-700 text-white w-full p-3 rounded-2xl hover:bg-blue-500'>
+                <button className=' bg-blue-700 text-white w-full p-3 rounded-2xl hover:bg-blue-500' onClick={()=>handlePay(sub.price,sub.sub_id)}>
                     Pay Now
                 </button>
                 <div className=' h-5'/>

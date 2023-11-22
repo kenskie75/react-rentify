@@ -1,13 +1,18 @@
 
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import { dataIsRequired } from "../../../../constant/String";
 import { addNewVehicle } from "../../../../services/VehicleService";
-import { Button, Select, TextInput } from "../../../../component";
+import { Button, ImageInput, Select, TextInput } from "../../../../component";
 import { Routes } from "../../../../types/Routes.enum";
 import { SelectInputOption } from "../../../../types/SelectOptionType.type";
 import Swal from "sweetalert2";
 import useAlertOption from "../../../../hooks/useAlertOption";
+import { useModalContext } from "../../../../context/ModalContext/ModalContext";
+import { useLoadingContext } from "../../../../context/LoadingContext/LoadingContext";
+import { generateNonce } from "../../../../utils/string";
+import { getImage, uploadImage } from "../../../../services/VehicleImage.service";
+import { configVariable } from "../../../../constant/ConfigVariable";
 
 const VEHICLE_TYPE:SelectInputOption[] = [
     {
@@ -34,9 +39,11 @@ export default function AddVehicle() {
     const [model,setModel] = useState<string>('');
     const [description,setDescription] = useState<string>('');
     const [price,setPrice] = useState<string>('');
-    const {alertWarning,alertError} = useAlertOption();
-
-
+    const {alertWarning,alertError,alertSuccess} = useAlertOption();
+    const {setContent,setIsOpen} = useModalContext();
+    const [nonce,setNonce] = useState<string>("");
+    const [images,setImages] = useState<any[]>([]);
+    const {openLoading,handleCloseLoading} = useLoadingContext();
     const displayImage = useMemo(()=>{
         if(!img){
             return (<div className=" h-52 w-52 bg-slate-200"/>)
@@ -152,15 +159,71 @@ export default function AddVehicle() {
         }
     }
 
+    async function handleUpload(ig:any,non:string){
+        try {
+            openLoading();
+            console.log("GG",non);
+            let formdata = new FormData();
+            formdata.append('img',ig)
+            formdata.append('nonce',non);
+            const resp = await uploadImage(formdata);
+
+            if(resp.status.toString() === '1'){
+             const resp = await getImage(non);
+                
+                setImages(resp);
+                alertSuccess("Successfully Uploaded");
+               
+            }else{
+                alertError();
+            }
+        } catch (error) {
+            alertError();
+        }finally{
+            handleCloseLoading();
+        }
+    }
+    console.log("NONCE",nonce)
+    const modalContent = useCallback((img:any,non:string) =>{
+        return(
+            <div className=" w-full">
+                <h1>Upload Image</h1>
+                <div className=" w-full flex justify-center items-center">
+                   <img src={URL.createObjectURL(img)} className=" w-32 h-32" alt="img" />
+                </div>
+                <div className=" h-10"/>
+                <Button text="Upload" onClick={()=>handleUpload(img,non)}/>
+                <div className=" h-5"/>
+                <Button text="Close" outline onClick={()=>setIsOpen(false)}/>
+            </div>
+        );
+    },[img]);
+
+    useEffect(() => {
+      setNonce(generateNonce());
+    }, [])
+    
+    const displayList = useMemo(()=>{
+        return images.map((val:any,i:number)=>{
+           return <img className=" w-36 h-36" src={configVariable.BASE_URL+val.path} alt="ewe" key={i.toString()}/>
+        });
+    },[images])
+
     return (
     <div className=' pt-32 flex justify-center'>
         <div className=" bg-white w-1/2 p-8">
             <h1>Vehicle</h1>
-            <div className=" flex justify-center">
-                {displayImage}    
+            <div className=" grid grid-cols-2 gap-3">
+                {displayList}
             </div>
-            <div className=" h-10"/>
-            <input type='file' onChange={(e)=>setImg(e.target?.files?.[0])}/>
+            <div className=" flex justify-center">
+                    <ImageInput onChange={(e)=>{
+                        setImg(e.target.files?.[0])
+                        setIsOpen(true);
+                        setContent(modalContent(e.target.files?.[0],nonce))
+                      }
+                    }/>    
+            </div>
             <div className=" h-5"/>
             <TextInput label="Brand" onChange={(e)=>setBrand(e.target.value)} value={brand}/>
             <div className=" h-3"/>

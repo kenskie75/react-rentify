@@ -30,7 +30,7 @@ export default function Vehicles() {
                 confirmButtonText:'Subscribe Now!'
             }).then(res=>{
                 if(res.isConfirmed){
-                    window.location.href=Routes.VEHICLE;
+                    window.location.href=Routes.SUBSCRIPTION;
                 }else{
                     Swal.close();
                 }
