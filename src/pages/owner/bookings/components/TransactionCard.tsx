@@ -14,13 +14,14 @@ export type Props = {
     price:string;
     description:string;
     isRenter?:boolean;
+    images:any[];
 }
 
 
 
 export default function TransactionCard
 (props:Props) {
-    const {image,vehicleName,ownerName,price,description,refId,isRenter} = props;
+    const {image,vehicleName,ownerName,price,description,refId,isRenter,images} = props;
 
     const displayName = useMemo(() => {
         if(!isRenter){
@@ -43,7 +44,7 @@ export default function TransactionCard
                 <Button text={'View Transaction'} onClick={()=>window.location.href=`${Routes.BOOKING}/${refId}`}/>
             </div>
             <div className="  flex flex-1 justify-end items-end">
-                <img src={configVariable.BASE_URL+image} alt="wew" className=' h-[250px] w-[250px]'/>
+                <img src={configVariable.BASE_URL+images?.[0].path} alt="wew" className=' h-[250px] w-[250px]'/>
             </div>
         </div>
     </div>

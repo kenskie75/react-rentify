@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { TextInput, Button } from '../../../../component';
+import { TextInput, Button, ImageInput } from '../../../../component';
 import useAlertOption from '../../../../hooks/useAlertOption';
 import useGetAccountFromStorage from '../../../../hooks/useGetAccountFromStorage';
 import { createDriver } from '../../../../services/DriverService.service';
@@ -8,6 +8,8 @@ import { Routes } from '../../../../types/Routes.enum';
 
 export default function AddDriver() {
     const {user} = useGetAccountFromStorage();
+    const [img,setImg] = useState<any>(null);
+    const [license,setLicense] = useState<any>(null);
     const [username,setUsername] = useState<string>('');
     const [password,setPassword] = useState<string>('');
     const [firstname,setFirstname] = useState<string>('');
@@ -29,23 +31,25 @@ export default function AddDriver() {
             if(!user){
                 return;
             }
+
             if(isFieldNotValid()){
                 return;
             }
 
-            const payload = {
-                owner_id:user?.user_id,
-                username,
-                password,
-                firstName:firstname,
-                middleName:middlename,
-                lastName:lastname,
-                contactNumber
-            }
 
-            const result = await createDriver(payload);
+            let formdata = new FormData();
+            formdata.append('img',img);
+            formdata.append('license',license);
+            formdata.append('owner_id',user?.user_id);
+            formdata.append('username',username);
+            formdata.append('password',password);
+            formdata.append('fname',firstname);
+            formdata.append('mname',middlename)
+            formdata.append('lname',lastname);
+            formdata.append('contact',contactNumber);
+            const result = await createDriver(formdata);
 
-            if(result.status === '1'){
+            if(result.status.toString() === '1'){
               Swal.fire({
                 text:'Successfully Added',
                 icon:'success'
@@ -66,6 +70,10 @@ export default function AddDriver() {
 
 
     const isFieldNotValid = () =>{
+        if(!img){
+            alertWarning("Driver's Picture is Required");
+            return true;
+        }
         if(!username){
             alertWarning("Username is Required");
             return true;
@@ -95,16 +103,25 @@ export default function AddDriver() {
             alertWarning("Lastname is Required");
             return true;
         }
+
+        if(!license){
+            alertWarning("License is Required");
+            return true;
+        }
       
+
         return false;
         
     }
   
     return (
-    <div className=' w-full flex justify-center pt-32'>
+    <div className=' w-full flex justify-center pt-32 mb-10'>
         <div className=' w-1/2 bg-white p-4'>
             <h1 className=' text-xl font-bold'>Create Driver</h1>
             <div className=' h-5'/>
+                <div className=' flex justify-center items-center'>
+                    <ImageInput onChange={(e)=>setImg(e.target?.files?.[0])} image={img}/>
+                </div>
                 <div className=' px-5'>
                 <TextInput label='Username' value={username} onChange={(e)=>onChangeText(e,setUsername)}/>
                 <div className=' h-5'/>
@@ -118,6 +135,11 @@ export default function AddDriver() {
                 <div className=' h-5'/>
                 <TextInput label='Mobile Number' value={contactNumber}  onChange={(e)=>onChangeText(e,setContactNumber)} maxLength={11}/>
                 <div className='h-10'/> 
+                <h1>Driver's License</h1>
+                <div className=' mt-5 justify-center items-center flex'>
+                    <ImageInput onChange={(e)=>setLicense(e.target?.files?.[0])} image={license}/>
+                </div>
+                <div className=' h-10'/>
                 <Button text="Add This Driver" onClick={()=>handleAddDriver()}/>
             </div>
         </div>

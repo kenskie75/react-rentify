@@ -5,7 +5,7 @@ import Swal from 'sweetalert2'
 export default function useAlertOption() {
   
     const alertSuccess = (message:string) =>{
-        Swal.fire('Oops',message,'success');
+        Swal.fire('Successful',message,'success');
 
     }
 

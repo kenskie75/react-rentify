@@ -25,7 +25,7 @@ export default function ImageInput(
         }
 
         return(
-            <div className=" h-full w-full absolute">
+            <div className=" h-full w-full absolute bg-white">
                 <img src={URL.createObjectURL(image)} alt="documents" className=" w-full h-full"/>
             </div>
         )

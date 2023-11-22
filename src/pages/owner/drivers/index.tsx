@@ -3,6 +3,7 @@ import { Button } from "../../../component";
 import useGetDriversByOwner from "../../../hooks/drivers/useGetDriversByOwner";
 import { Routes } from "../../../types/Routes.enum";
 import { formatFullName } from "../../../utils/string";
+import { configVariable } from "../../../constant/ConfigVariable";
 
 
 export default function Drivers() {
@@ -10,11 +11,17 @@ export default function Drivers() {
   
     const displayDrivers = useMemo(() => {
         return data?.map((val:any,i:number)=>(
-            <div className=" border-b py-5 px-3 border-b-slate-400">
-                <p className=" font-bold">{formatFullName({firstName:val.firstName,middleName:val.middleName,lastName:val.lastName})}</p>
-                <div className=" h-5"/>
-                <p><span className=" font-bold mr-5">Username:</span>{val.username}</p>
-                <p><span className=" font-bold mr-5">Contact No.:</span>{val.contactNumber}</p>
+            <div className=" border-b py-5 px-3 border-b-slate-400 flex flex-row">
+                <div>
+                    <img src={configVariable.BASE_URL+val.driver_pic} alt='driver' className=" h-28 w-28"/>
+                </div>
+                <div className=" px-10">
+                    <p className=" font-bold">{formatFullName({firstName:val.firstName,middleName:val.middleName,lastName:val.lastName})}</p>
+                    <div className=" h-5"/>
+                    <p><span className=" font-bold mr-5">Username:</span>{val.username}</p>
+                    <p><span className=" font-bold mr-5">Contact No.:</span>{val.contactNumber}</p>
+                </div>
+               
             </div>
         ))
     }, [data]);

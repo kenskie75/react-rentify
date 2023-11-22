@@ -38,19 +38,13 @@ export default function AddVehicle() {
     const [brand,setBrand] = useState<string>('');
     const [model,setModel] = useState<string>('');
     const [description,setDescription] = useState<string>('');
+    const [capacity,setCapacity] = useState<string>('');
     const [price,setPrice] = useState<string>('');
     const {alertWarning,alertError,alertSuccess} = useAlertOption();
     const {setContent,setIsOpen} = useModalContext();
     const [nonce,setNonce] = useState<string>("");
     const [images,setImages] = useState<any[]>([]);
     const {openLoading,handleCloseLoading} = useLoadingContext();
-    const displayImage = useMemo(()=>{
-        if(!img){
-            return (<div className=" h-52 w-52 bg-slate-200"/>)
-        }
-
-        return <img className=" h-52 w-52" src={URL.createObjectURL(img)} alt="img"/>
-    },[img])
   
     const displayOr = useMemo(()=>{
         if(!orImg){
@@ -67,7 +61,7 @@ export default function AddVehicle() {
 
         return <img className=" h-52 w-52" src={URL.createObjectURL(crImg)} alt="cr"/>
     },[crImg]);
-
+    console.log("IMG",images)
     async function handleSubmit(){
         try {
 
@@ -76,8 +70,8 @@ export default function AddVehicle() {
                 return;
             }
             const user = JSON.parse(storage);
-            if(!img){
-                alertWarning(dataIsRequired('Vehicle Image'));
+            if(images.length < 3){
+                alertWarning("Image should atleas 3");
 
                 return;
             }
@@ -90,6 +84,12 @@ export default function AddVehicle() {
 
             if(!description){
                 alertWarning(dataIsRequired('Description '));
+
+                return;
+            }
+
+            if(!capacity){
+                alertWarning(dataIsRequired('Capacity '));
 
                 return;
             }
@@ -132,7 +132,8 @@ export default function AddVehicle() {
             formdata.append('userId',user.user_id);
             formdata.append('or',orImg);
             formdata.append('cr',crImg);
-            formdata.append('img',img);
+            formdata.append('nonce',nonce);
+            formdata.append('capacity',capacity);
             formdata.append('brand',brand);
             formdata.append('model',model);
             formdata.append('description',description);
@@ -170,8 +171,8 @@ export default function AddVehicle() {
 
             if(resp.status.toString() === '1'){
              const resp = await getImage(non);
-                
-                setImages(resp);
+                setIsOpen(false) 
+                setImages(resp.data);
                 alertSuccess("Successfully Uploaded");
                
             }else{
@@ -204,7 +205,10 @@ export default function AddVehicle() {
     }, [])
     
     const displayList = useMemo(()=>{
-        return images.map((val:any,i:number)=>{
+        if(!images){
+            return;
+        }
+        return images?.map((val:any,i:number)=>{
            return <img className=" w-36 h-36" src={configVariable.BASE_URL+val.path} alt="ewe" key={i.toString()}/>
         });
     },[images])
@@ -229,6 +233,9 @@ export default function AddVehicle() {
             <div className=" h-3"/>
             <TextInput label="Description" onChange={(e)=>setDescription(e.target.value)} value={description}/>
             <div className=" h-3"/>
+            <TextInput label="Capacity" onChange={(e)=>setCapacity(e.target.value)} value={capacity}/>
+            <div className=" h-3"/>
+
             <p className=" text-sm mb-3">Vehicle Type</p>
             <Select options={VEHICLE_TYPE} selectedOption={vehicleType} setSelectedOption={setVehicleType}/>
             <div className=" h-3"/>

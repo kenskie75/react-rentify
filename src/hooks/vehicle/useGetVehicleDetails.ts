@@ -8,7 +8,7 @@ type Props = {
 
 
 export default function useGetVehicleDetails(props:Props) {
-    const [data,setData] = useState<VehicleDetailsDto|null>(null)
+    const [data,setData] = useState<any|null>(null)
     
     const sendRequest = useCallback(async()=>{
         try {

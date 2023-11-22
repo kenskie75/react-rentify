@@ -8,7 +8,7 @@ export default function Transactions() {
     const displayData = useMemo(()=>{
         return data.map((data:any,i:number)=>{
           const ownerName = data.firstname+" "+data.middlename+" "+data.lastname;
-          return <TransactionCard refId={data.ref_id} key={i.toString()} description={data.description} image={data.vehicleImage} vehicleName={data.brand} ownerName={ownerName} price={data.amount}  />
+          return <TransactionCard images={data.images} refId={data.ref_id} key={i.toString()} description={data.description} image={data.vehicleImage} vehicleName={data.brand} ownerName={ownerName} price={data.amount}  />
       })
       },[data])
   return (

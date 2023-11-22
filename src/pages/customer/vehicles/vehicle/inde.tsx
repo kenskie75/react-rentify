@@ -8,18 +8,34 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { DragEndEvent } from 'leaflet';
 import dayjs from 'dayjs';
 import { useParams } from 'react-router-dom';
-import { ListItem, Button, Modal, TextInput } from '../../../../component';
+import { ListItem, Button, Modal, TextInput, Select } from '../../../../component';
 import { configVariable } from '../../../../constant/ConfigVariable';
 import useAlertOption from '../../../../hooks/useAlertOption';
 import useGetAccountFromStorage from '../../../../hooks/useGetAccountFromStorage';
 import useGetVehicleDetails from '../../../../hooks/vehicle/useGetVehicleDetails';
 import { createBooking } from '../../../../services/BookingsService.service';
 import { calculateDistance } from '../../../../utils/location.utils';
-
+import SelectInput from '../../../../component/Select';
+import Swal from 'sweetalert2';
+import { Routes } from '../../../../types/Routes.enum';
 type ValuePiece = Date | null;
 
 type Value = ValuePiece | [ValuePiece, ValuePiece];
 
+
+const PAYMENT_METHOD = [
+    {
+        name:"Select Payment Method",
+        value:""
+    },
+    {
+        name:"Online Via Gcash",
+        value:"GCASH"
+    },{
+        name:"Cash On Hand",
+        value:"COD"
+    }
+];
 export default function Vehicle() {
     const {id} = useParams();
     const {alertError,alertSuccess} = useAlertOption();
@@ -32,6 +48,7 @@ export default function Vehicle() {
     const [kilometer,setKilometer] = useState<string>('');
     const [totalFee,setTotalFee] = useState<string>('');
     const [isOpen,setIsOpen] = useState<boolean>(false);
+    const [paymentMethod,setPaymentMethod] = useState<string>("");
     const [time,setTime] = useState<string>('');
         const originIcon = new L.DivIcon({
      className:' pin2',
@@ -192,6 +209,10 @@ const [post,setPost] = useState<LatLngExpression>();
     },[totalFee,kilometer])
 
     async function handleBookNow(){
+        if(!paymentMethod){
+            return;
+        }
+
         if(!totalFee){
             
             return;
@@ -227,12 +248,21 @@ const [post,setPost] = useState<LatLngExpression>();
             time:time,
             owner_id:vehicle?.user_id,
             origin:origin?.toString(),
-            destination:destination?.toString()
+            destination:destination?.toString(),
+            paymentMethod:paymentMethod
         }
         const response = await createBooking(payload)
         
        if(response.status.toString() === '1'){
-            alertSuccess('Successfully Created')
+            Swal.fire({
+                icon:"success",
+                text:'Successfully Booked!',
+                confirmButtonText:'Proceed'
+            }).then(val=>{
+                if(val.isConfirmed){
+                    window.location.href=Routes.TRANSACTIONS
+                }
+            })
             return;
         }
 
@@ -249,7 +279,7 @@ const [post,setPost] = useState<LatLngExpression>();
             <h3 className=' font-bold'>Vehicle Details</h3>
             <div className=' flex'>
                 <div className=' flex flex-1'>
-                    <img src={(configVariable.BASE_URL as string)+vehicle?.vehicleImage} alt='vehicle image' className=' h-[300px] w-[300px]'/>
+                    <img src={(configVariable.BASE_URL as string)+vehicle?.images?.[0].path} alt='vehicle ' className=' h-[300px] w-[300px]'/>
                 </div>
                 <div className=' px-4 flex flex-1 flex-col'>
                     <p className=' font-bold'>{vehicle?.description}</p>
@@ -258,6 +288,7 @@ const [post,setPost] = useState<LatLngExpression>();
                     <ListItem label='Brand' value={vehicle?.brand as string}/>
                     <ListItem label='Year Model' value={vehicle?.model as string} />
                     <ListItem label='Vehicle Type' value={vehicle?.vehicle_type as string}/>
+                    <ListItem label='Capacity' value={vehicle?.capacity + "kg"}/>
                     <ListItem label='Rent Price' value={vehicle?.price as string}/>
                     <>{displayDistance}</>
                     <>{displayTotal}</>
@@ -270,6 +301,8 @@ const [post,setPost] = useState<LatLngExpression>();
              
                 <div className=' flex flex-1 flex-col'>
                     <TextInput type='time' label='Pick up Time' onChange={(e:any)=>setTime(e.target.value)}/>
+                    <div className=' h-5'/>
+                    <Select  options={PAYMENT_METHOD} selectedOption={paymentMethod} setSelectedOption={setPaymentMethod} />
                     <div className=' h-10'/>
                     {displayDestinationIsSet}
                     <Button text={'Select Destination'} outline onClick={()=>getLocation()}/>

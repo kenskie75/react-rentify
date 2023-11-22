@@ -13,13 +13,15 @@ import { Routes } from "../../../../types/Routes.enum";
 import { BookingStatus } from "../../../../types/BookingStatus.enum";
 import Swal from "sweetalert2";
 import { displayStatusByOwner, displaystatus } from "../../../../utils/booking.utils";
+import { useModalContext } from "../../../../context/ModalContext/ModalContext";
+import AdditionalFee from "../components/AdditionalFeeModal";
 
 export default function Booking() {
     const {id} = useParams();
     const {data} = useGetBookingsByRefId({refId:id?id:''});
     const {user} = useGetAccountFromStorage();
     const {data:driversList} = useGetDriversByUserId({userId:data?.owner?.user_id ?? data?.owner?.user_id});
-
+    const {setContent,setIsOpen} = useModalContext();
 
     const [selectedDriver,setSelectedDriver] = useState<any>(null);
     const {alertWarning,alertSuccess} = useAlertOption();
@@ -178,6 +180,52 @@ export default function Booking() {
     }
     return displaystatus(data?.booking?.status)
   },[data?.booking?.status, user]);
+
+  const displayPayButton = useMemo(()=>{
+
+
+    if(user?.user_type !== 'RENTER' ){
+        return;
+    }
+
+    if(data?.booking?.status === 'PENDING'){
+        return   <Button  outline text={"Cancel Booking"} onClick={function (): void {
+            throw new Error("Function not implemented.");
+        } }/>
+    }
+
+    return <div>
+        <Button text={"Pay Now"} onClick={function (): void {
+            throw new Error("Function not implemented.");
+        } }/>
+    </div>
+  },[data?.booking?.status, user?.user_type]) 
+
+  function handleOpenAdditionalFee(){
+    setIsOpen(true)
+    setContent(<AdditionalFee id={data?.booking?.ref_id} onClose={()=>setIsOpen(false)}/>)
+  }
+
+  const displayAddtionalButton = useMemo(()=>{
+    if(user?.user_type !== 'RENTER' ){
+        return;
+    }
+
+    if(data?.booking?.status === 'PENDING'){
+        return;
+    }
+    if(data?.booking?.paymentMethod === "COD" || parseFloat(data?.booking?.additionalfee) > 0){
+        return;
+    }
+
+    return <div>
+        <Button outline text={"Additional Fee"} onClick={()=>handleOpenAdditionalFee()}/>
+    </div>
+  },[data?.booking?.additionalfee, data?.booking?.paymentMethod, data?.booking?.status, user?.user_type]) 
+  
+  const displayTotal = useMemo(()=>{
+    return parseFloat(data?.booking?.additionalfee) + parseFloat(data?.booking?.amount)
+  },[data?.booking?.additionalfee, data?.booking?.amount])
   return (
    <Container>
         <div className=" flex w-full justify-center">
@@ -189,13 +237,25 @@ export default function Booking() {
                 <ListItem label="Renter Name" value={formatFullName({firstName:data?.customer?.firstname,middleName:data?.customer?.middlename,lastName:data?.customer?.lastname})}/>
                 <ListItem label="Pick Up Date" value={dayjs(data?.booking?.book_date).format("MM-DD-YYYY") + ` ${data?.booking?.pickup_time}`}/>
                 <ListItem label="Distance" value={data?.booking?.distance+' km'}/>
-                <ListItem label="Total Amount" value={'Php ' +data?.booking?.amount}/>
+                <ListItem label="Additional Fee" value={data?.booking?.additionalfee}/>
+                <ListItem label="Fee" value={'Php ' +data?.booking?.amount}/>
+                <ListItem label="Total Amount" value={'Php ' +displayTotal}/>
                 <div className=" w-full flex ">
-                    <div className=" flex flex-1"/>
-                    <div>
+                <div>
                         <Button text="View Destination"  onClick={()=>window.location.href=Routes.SHOW_MAPS+"/"+data?.booking?.ref_id}/>
+                       
                     </div>
+                    <div className=" flex flex-1 justify-end">
+                        <div className=" flex flex-row gap-4">
+                        {displayAddtionalButton}
+                       {displayPayButton}
+                        </div>
+                        
+                    </div>
+
+                    
                 </div>
+
                 <div className=" h-10"/>
                 <h1 className=" font-bold text-xl">Vehicle Information</h1>
                 <div className=" h-5"/>

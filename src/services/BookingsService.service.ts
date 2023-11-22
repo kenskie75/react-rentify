@@ -52,3 +52,9 @@ export const getTransactionsByOwner = async(userid:string)=>{
 
     return response.data;
 }
+
+export const createAdditionalFee = async(params:any)=>{
+    const response = await axiosInstance.post(`bookings/addfee`,params,{headers})
+
+    return response.data;
+}
