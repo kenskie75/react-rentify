@@ -145,11 +145,7 @@ export default function Booking() {
                 return;
             }
 
-            if(user?.user_type === 'RENTER'){
-                return(
-                    <Button text='Pay' onClick={()=>{}}/>
-                )
-            }
+          
             
             if(!user.user_type){
                 return(
