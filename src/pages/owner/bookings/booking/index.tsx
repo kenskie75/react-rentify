@@ -154,9 +154,17 @@ export default function Booking() {
             }
             break;
             case BookingStatus.TO_PICK_UP:        
-            if(!user.user_type){
-                return(
-                    <Button text='View Maps' disable={isBookIsToday}  onClick={()=>window.location.href=Routes.DRIVER_VIEW_MAPS+'/'+data?.booking?.ref_id}/>
+                if(!user.user_type){
+                    return(
+                        <Button text='View Maps' disable={isBookIsToday}  onClick={()=>window.location.href=Routes.DRIVER_VIEW_MAPS+'/'+data?.booking?.ref_id}/>
+                );
+            }
+            break;
+
+            case BookingStatus.PICK_UP:        
+                if(!user.user_type){
+                    return(
+                        <Button text='View Maps' disable={isBookIsToday}  onClick={()=>window.location.href=Routes.DRIVER_VIEW_MAPS+'/'+data?.booking?.ref_id}/>
                 );
             }
             break;

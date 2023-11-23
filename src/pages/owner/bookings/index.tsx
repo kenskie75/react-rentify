@@ -7,11 +7,12 @@ export default function Bookings() {
     const {data} = useGetBookingsByStatus({status:'PENDING'});
     const displayData = useMemo(()=>{
     
-        return data.map((data:any,i:number)=>{
+      return data.map((data:any,i:number)=>{
           const ownerName = data.firstname+" "+data.middlename+" "+data.lastname;
           return <TransactionCard images={data.images} refId={data.ref_id} key={i.toString()} description={data.description} image={data.vehicleImage} vehicleName={data.brand} ownerName={ownerName} price={data.amount}  />
       })
-      },[data])
+      },[data]);
+
     return (
         <Container>
             <div className=' w-full flex justify-center'>
