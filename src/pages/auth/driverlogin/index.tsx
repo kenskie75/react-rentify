@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react'
+import { useState } from 'react';
 
 import Swal from 'sweetalert2';
 import { TextInput, Button } from '../../../component';
@@ -25,11 +25,11 @@ async function handleLogin(){
         }
         const result = await loginDriver(payload)
 
-        if(!result.data){
-            alertError(result.data.message);
+        if(result.status?.toString() === '0'){
+            alertError(result.message);
             return;
         }
-
+        console.log("GG")
         const userData = await result.data;
         const stringData = JSON.stringify(userData)
          await localStorage.setItem('account',stringData);

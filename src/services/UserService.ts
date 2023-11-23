@@ -38,3 +38,9 @@ export const sendVerificationCode = async(payload:any)=>{
 
     return resp.data;
 }
+
+export const updateUserData = async(id:string,payload:any)=>{
+    const resp = await axiosInstance.post(`user/updateuser/${id}`,payload,{headers});
+
+    return resp.data;
+}

@@ -25,7 +25,7 @@ export default function UserVerification(props:Props) {
 
       await handleRegister();
     }
-    console.log("GG",verficationCode)
+
     return (
     <div className=' w-full' onClick={()=>ref.current?.focus()}>
         <div className=" w-full flex flex-row">

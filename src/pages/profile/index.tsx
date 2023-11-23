@@ -1,15 +1,17 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Container } from "../../component";
 import useGetAccountFromStorage from "../../hooks/useGetAccountFromStorage";
 import { useModalContext } from "../../context/ModalContext/ModalContext";
 import UpdateModal from "./component/UpdateModal";
+import UpdateUser from "./component/UpdateUser";
+import DisplayUser from "./component/DisplayUser";
 
 const image = require('../../assets/images/user.png')
 
 export default function Profile() {
     const {user} = useGetAccountFromStorage();
     const {setContent,setIsOpen} = useModalContext();
-  
+    const [isUpdate,setIsUpdate] = useState<boolean>(false);
     const profileImage = useMemo(() => {
         if(!user){
             return;
@@ -25,6 +27,14 @@ export default function Profile() {
         setContent(<UpdateModal/>)
         setIsOpen(true)
     }
+
+    const displayContent = useMemo(()=>{
+        if(isUpdate){
+            return <UpdateUser user={user} setIsUpdate={setIsUpdate}/>
+        }
+
+        return <DisplayUser user={user} setIsUpdate={setIsUpdate} />
+    },[user,isUpdate])
    return (
     <Container>
         <div className=" flex w-full justify-center">
@@ -38,6 +48,7 @@ export default function Profile() {
                         </div>                     
                     </div>
                 </div>
+                {displayContent}
             </div>
         </div>
     </Container>
