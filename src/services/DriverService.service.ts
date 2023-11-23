@@ -1,9 +1,13 @@
-import axiosInstance from "../utils/axiosInstance"
+import axiosInstance from "../utils/axiosInstance";
 const headers = {
     'Content-Type' : 'multipart/form-data'
 }
+
+
 export const loginDriver = async(payload:any) =>{
-    const resp = await axiosInstance.post('drivers/login',payload,{headers});
+    const resp = await axiosInstance.post('drivers/login',payload,{headers:{
+        "Content-Type":"text/plain"
+    }});
 
     return resp.data;
 }
