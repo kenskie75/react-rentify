@@ -15,13 +15,14 @@ import Swal from "sweetalert2";
 import { displayStatusByOwner, displaystatus } from "../../../../utils/booking.utils";
 import { useModalContext } from "../../../../context/ModalContext/ModalContext";
 import AdditionalFee from "../components/AdditionalFeeModal";
+import PaymentModal from "../components/PaymentModal";
 
 export default function Booking() {
     const {id} = useParams();
     const {data} = useGetBookingsByRefId({refId:id?id:''});
     const {user} = useGetAccountFromStorage();
     const {data:driversList} = useGetDriversByUserId({userId:data?.owner?.user_id ?? data?.owner?.user_id});
-    const {setContent,setIsOpen} = useModalContext();
+    const {setContent,setIsOpen,setSize} = useModalContext();
 
     const [selectedDriver,setSelectedDriver] = useState<any>(null);
     const {alertWarning,alertSuccess} = useAlertOption();
@@ -46,7 +47,6 @@ export default function Booking() {
         
 
         if(!data?.driver &&  user?.user_type === 'OWNER'){
-           
             return driversList?.map((val:any,i:number)=>(
                 <div className=" w-full border-b border-b-slate-300 py-3 px-5 flex flex-row bg-slate-200">
                     <div className=" flex flex-1 flex-col">
@@ -189,15 +189,14 @@ export default function Booking() {
     }
 
     if(data?.booking?.status === 'PENDING'){
-        return   <Button  outline text={"Cancel Booking"} onClick={function (): void {
-            throw new Error("Function not implemented.");
-        } }/>
+        return   <Button  outline text={"Cancel Booking"} onClick={()=>{}}/>
     }
 
+    if(data?.booking?.paymentCode){
+        return;
+    }
     return <div>
-        <Button text={"Pay Now"} onClick={function (): void {
-            throw new Error("Function not implemented.");
-        } }/>
+        <Button text={"Pay Now"} onClick={()=>handleShowPayment(data?.customer?.mobileNumber,data?.owner?.mobileNumber,data?.booking?.amount,data?.booking?.additionalfee,data?.booking?.ref_id)}/>
     </div>
   },[data?.booking?.status, user?.user_type]) 
 
@@ -226,6 +225,21 @@ export default function Booking() {
   const displayTotal = useMemo(()=>{
     return parseFloat(data?.booking?.additionalfee) + parseFloat(data?.booking?.amount)
   },[data?.booking?.additionalfee, data?.booking?.amount])
+
+  function handleShowPayment(cMobileNo:string,oMobileNo:string,amount:string,additionalfee:string,refId:string){
+    const total = parseFloat(amount) + parseFloat(additionalfee);
+    setIsOpen(true);
+    setSize(40);
+    setContent(<PaymentModal setIsOpen={setIsOpen} refId={refId} ownerMobileNo={oMobileNo} renterMobileNo={cMobileNo} amount={total.toString()}/>)
+  }
+
+  const displayPaymentCode = useMemo(()=>{
+    if(!data?.booking?.paymentCode){
+        return;
+    }
+
+    return <ListItem label="Payment Code" value={data?.booking?.paymentCode}/>
+  },[data?.booking?.paymentCode])
   return (
    <Container>
         <div className=" flex w-full justify-center">
@@ -240,6 +254,7 @@ export default function Booking() {
                 <ListItem label="Additional Fee" value={data?.booking?.additionalfee}/>
                 <ListItem label="Fee" value={'Php ' +data?.booking?.amount}/>
                 <ListItem label="Total Amount" value={'Php ' +displayTotal}/>
+                {displayPaymentCode}
                 <div className=" w-full flex ">
                 <div>
                         <Button text="View Destination"  onClick={()=>window.location.href=Routes.SHOW_MAPS+"/"+data?.booking?.ref_id}/>

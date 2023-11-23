@@ -58,3 +58,9 @@ export const createAdditionalFee = async(params:any)=>{
 
     return response.data;
 }
+
+export const payBooking = async(payload:any)=>{
+    const response = await axiosInstance.post(`bookings/pay`,payload,{headers});
+
+    return response.data;
+}
