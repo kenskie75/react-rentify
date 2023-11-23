@@ -97,7 +97,7 @@ export default function Vehicles() {
                     </div>
                 </div>
                 <div className=" flex flex-1 w-full   justify-end items-center ">
-                        <button className=" p-3 rounded-3xl bg-slate-900 text-white" onClick={()=>handleOpen(val)}>
+                        <button className=" p-3 rounded-3xl bg-slate-900 text-white" onClick={()=>window.location.href=Routes.VEHICLE_DETAILS+"/"+val.vehicle_id}>
                             View
                         </button>
                     </div>

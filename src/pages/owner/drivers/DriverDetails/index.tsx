@@ -1,0 +1,77 @@
+import React, { useMemo, useState } from 'react'
+import { Button, Container } from '../../../../component'
+import UpdateDriver from './UpdateDriver'
+import { useParams } from 'react-router-dom'
+import useGetDriverById from '../../../../hooks/drivers/useGetDriverById';
+import Details from './Details';
+import { updateDriverDetails } from '../../../../services/DriverService.service';
+import Swal from 'sweetalert2';
+import useAlertOption from '../../../../hooks/useAlertOption';
+export default function DriverDetails() {
+    const {id} = useParams();
+    const {data} = useGetDriverById({id:id ? id : ''});
+    const [isUpdate,setIsUpdate] = useState<boolean>(false);
+    const {alertError} = useAlertOption();
+     const displayContent = useMemo(() => {
+        if(isUpdate){
+            return <UpdateDriver setIsUpdate={setIsUpdate} data={data}/>
+        }
+
+        return <Details data={data}/>
+    }, [isUpdate,data]);
+
+    const handleUpdate =async()=>{
+        try {
+            const payload = {
+              isDeleted:1
+            }
+            
+            const resp = await updateDriverDetails(data?.driver_id,payload);
+    
+            if(resp.status.toString() === '1'){
+                Swal.fire({
+                    icon:'success',
+                    text:'Successfully Updated',
+                }).then((val)=>{
+                    if(val.isConfirmed){
+                        window.location.reload();
+                    }
+                })            
+            }
+        } catch (error) {
+            alertError();
+        }
+    }
+
+    function handleOpenModal(){
+        Swal.fire({
+            icon:'question',
+            text:'Are you sure do want to delete this Data?',
+            showCancelButton:true
+        }).then((val)=>{
+            if(val.isConfirmed){
+                handleUpdate();
+            }else{
+                Swal.close()
+            }
+        })
+      }
+
+    return (
+    <Container>
+        <div className=' flex w-full justify-center items-center'>
+            <div className=' w-1/2 bg-white p-8'>
+                {displayContent}
+                
+                    {!isUpdate && 
+                       <div className=' py-5 flex flex-row gap-5'>
+                            <Button text='Update Details' onClick={()=>setIsUpdate(true)}/>
+                            <Button text='Remove this Driver' onClick={()=>handleOpenModal()} outline/>
+                       </div>
+                    }
+               
+            </div>
+        </div>
+    </Container>
+  )
+}

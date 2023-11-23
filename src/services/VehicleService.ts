@@ -27,3 +27,12 @@ export const getVehicleDetails = async(id:string)=>{
 
     return resp;
 }
+
+export const updateVehicle = async(id:string,payload:any)=>{
+    const resp = await axiosInstance.post(`vehicle/update/${id}`,payload,{headers:{
+        'Content-Type':'text/plain'
+    }});
+
+    return resp.data;
+
+}

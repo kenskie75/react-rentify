@@ -24,3 +24,15 @@ export const getDriverByOwner = async(ownerId:string)=>{
 
     return resp.data;
 }
+
+export const getDriverById = async(id:string)=>{
+    const resp = await axiosInstance.get('drivers/driver/'+id);
+
+    return resp.data;
+}
+
+export const updateDriverDetails = async(id:string,payload:any)=>{
+    const resp = await axiosInstance.post(`drivers/update/${id}`,payload,{headers:{"Content-Type":"text/plain"}});
+
+    return resp.data;
+}
