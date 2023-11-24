@@ -1,12 +1,13 @@
-import React, { useMemo, useState } from 'react'
-import { Button, Container } from '../../../../component'
-import UpdateDriver from './UpdateDriver'
-import { useParams } from 'react-router-dom'
+import { useMemo, useState } from 'react';
+import { Button, Container } from '../../../../component';
+import UpdateDriver from './UpdateDriver';
+import { useParams } from 'react-router-dom';
 import useGetDriverById from '../../../../hooks/drivers/useGetDriverById';
 import Details from './Details';
 import { updateDriverDetails } from '../../../../services/DriverService.service';
 import Swal from 'sweetalert2';
 import useAlertOption from '../../../../hooks/useAlertOption';
+import { Routes } from '../../../../types/Routes.enum';
 export default function DriverDetails() {
     const {id} = useParams();
     const {data} = useGetDriverById({id:id ? id : ''});
@@ -31,10 +32,10 @@ export default function DriverDetails() {
             if(resp.status.toString() === '1'){
                 Swal.fire({
                     icon:'success',
-                    text:'Successfully Updated',
+                    text:'Successfully Removed',
                 }).then((val)=>{
                     if(val.isConfirmed){
-                        window.location.reload();
+                        window.location.href=Routes.DRIVERS;
                     }
                 })            
             }

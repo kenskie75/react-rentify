@@ -1,5 +1,5 @@
-import React, { useMemo, useState } from 'react'
-import useGetVehicleDetails from '../../../../hooks/vehicle/useGetVehicleDetails'
+import { useMemo, useState } from 'react';
+import useGetVehicleDetails from '../../../../hooks/vehicle/useGetVehicleDetails';
 import { useParams } from 'react-router-dom';
 import { Button, Container } from '../../../../component';
 import UpdateDetails from './UpdateVehicle';
@@ -7,6 +7,7 @@ import Details from './Details';
 import Swal from 'sweetalert2';
 import { updateVehicle } from '../../../../services/VehicleService';
 import useAlertOption from '../../../../hooks/useAlertOption';
+import { Routes } from '../../../../types/Routes.enum';
 export default function VehicleDetails() {
     const {id} = useParams();
     const {data:item} = useGetVehicleDetails({id:id?id:''});
@@ -32,10 +33,10 @@ export default function VehicleDetails() {
             if(resp.status.toString() === '1'){
                 Swal.fire({
                     icon:'success',
-                    text:'Successfully Updated',
+                    text:'Successfully Removed',
                 }).then((val)=>{
                     if(val.isConfirmed){
-                        window.location.reload();
+                        window.location.href=Routes.VEHICLES;
                     }
                 })            
             }
