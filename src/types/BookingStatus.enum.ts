@@ -3,5 +3,7 @@ export enum BookingStatus {
     ACCEPTED = 'ACCEPTED',
     TO_PICK_UP = 'TO_PICK_UP',
     PICK_UP = 'PICK_UP',
-    SUCCESS = 'SUCCESS'
+    SUCCESS = 'SUCCESS',
+    CANCELED = 'CANCELED',
+    DECLINED = 'DECLINED'
 }

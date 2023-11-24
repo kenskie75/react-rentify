@@ -7,7 +7,7 @@ import { configVariable } from "../../../../constant/ConfigVariable";
 import useGetDriversByUserId from "../../../../hooks/drivers/useGetDriversByUserId";
 import { useCallback, useMemo, useState } from "react";
 import useAlertOption from "../../../../hooks/useAlertOption";
-import { acceptTransactions, updateBookingStatus } from "../../../../services/BookingsService.service";
+import { acceptTransactions, cancelPendingBooking, updateBookingStatus } from "../../../../services/BookingsService.service";
 import useGetAccountFromStorage from "../../../../hooks/useGetAccountFromStorage";
 import { Routes } from "../../../../types/Routes.enum";
 import { BookingStatus } from "../../../../types/BookingStatus.enum";
@@ -23,9 +23,10 @@ export default function Booking() {
     const {user} = useGetAccountFromStorage();
     const {data:driversList} = useGetDriversByUserId({userId:data?.owner?.user_id ?? data?.owner?.user_id});
     const {setContent,setIsOpen,setSize} = useModalContext();
+    const notShowThisStatus = [BookingStatus.CANCELED,BookingStatus.DECLINED];
 
     const [selectedDriver,setSelectedDriver] = useState<any>(null);
-    const {alertWarning,alertSuccess} = useAlertOption();
+    const {alertWarning,alertSuccess,alertError} = useAlertOption();
 
     const displayDriver = useMemo(()=>{
         if(!user){
@@ -120,6 +121,24 @@ export default function Booking() {
     }
   },[data?.booking?.ref_id])
 
+  async function handleDeclined(){
+    try {
+        const resp = await updateBookingStatus(data?.booking?.ref_id,BookingStatus.DECLINED);
+       
+        if(resp.status?.toString() === '1'){
+            Swal.fire({
+                text:'Successfully Declined',
+                icon:'success',
+            }).then(res=>{
+                if(res.isConfirmed){
+                    window.location.href=Routes.BOOKINGS
+                }
+            })
+        }
+    } catch (error) {
+        
+    }
+  }
   const displayButton = useMemo(()=>{
     const isBookIsToday =data?.booking?.book_date !== dayjs().format('YYYY-MM-DD');
 
@@ -134,7 +153,11 @@ export default function Booking() {
             }
             if(user.user_type === 'OWNER'){
                 return(
+                    <>
                     <Button text="Accept" onClick={handleAccept}/>
+                    <div className=" h-5"/>
+                    <Button text="Declined" onClick={handleDeclined}/>
+                    </>
                 );
             }
 
@@ -173,7 +196,27 @@ export default function Booking() {
    
     
   },[data?.booking?.book_date, data?.booking?.status, handleAccept, handlePickUp, user])
- 
+   
+  async function cancelBooking(){
+    try {
+        const resp = await cancelPendingBooking(data?.booking?.ref_id)
+
+        if(resp.status?.toString() === '1'){
+            Swal.fire({
+                icon:'success',
+                text:'Successfully Canceled'
+            }).then(res=>{
+                if(res.isConfirmed){
+                    window.location.href=Routes.TRANSACTIONS
+                }
+            })
+        }else{
+            alertError(resp.message)
+        }
+    } catch (error) {
+        alertError();
+    }
+  }
   const textStatusDisplay = useMemo(()=>{
     if(!user){
         return;
@@ -186,14 +229,17 @@ export default function Booking() {
   },[data?.booking?.status, user]);
 
   const displayPayButton = useMemo(()=>{
-
-
+   
     if(user?.user_type !== 'RENTER' ){
         return;
     }
 
     if(data?.booking?.status === 'PENDING'){
-        return   <Button  outline text={"Cancel Booking"} onClick={()=>{}}/>
+        return   <Button  outline text={"Cancel Booking"} onClick={()=>cancelBooking()}/>
+    }
+    
+    if(notShowThisStatus.includes(data?.booking?.status)){
+        return;
     }
 
     if(data?.booking?.paymentCode){
@@ -221,6 +267,10 @@ export default function Booking() {
         return;
     }
 
+    if(notShowThisStatus.includes(data?.booking?.status)){
+        return <p className=" text-red-500">This Transaction is Canceled Or Declined</p>
+    }
+
     return <div>
         <Button outline text={"Additional Fee"} onClick={()=>handleOpenAdditionalFee()}/>
     </div>
@@ -244,6 +294,14 @@ export default function Booking() {
 
     return <ListItem label="Payment Code" value={data?.booking?.paymentCode}/>
   },[data?.booking?.paymentCode])
+
+
+   const displayImages = useMemo(()=>{
+        return data?.vehicles?.images.map((val:any,i:number)=>{
+            return <img src={configVariable.BASE_URL + val.path} key={i.toString()} alt="Imgae" className=" h-32 w-32"/>
+        })
+   },[data?.vehicles?.images])
+
   return (
    <Container>
         <div className=" flex w-full justify-center">
@@ -267,7 +325,7 @@ export default function Booking() {
                     <div className=" flex flex-1 justify-end">
                         <div className=" flex flex-row gap-4">
                         {displayAddtionalButton}
-                       {displayPayButton}
+                        {displayPayButton}
                         </div>
                         
                     </div>
@@ -286,8 +344,9 @@ export default function Booking() {
                         <ListItem label="Model" value={data?.vehicles?.model}/>
                         <ListItem label="Vehicle Type" value={data?.vehicles?.vehicle_type}/>
                     </div>
-                    <div className=" flex flex-1 justify-center">
-                        <img src={configVariable.BASE_URL+data?.vehicles?.vehicleImage} alt="Vehicle" className=" h-[200px] w-[200px]"/>
+                    <div className=" flex flex-1 flex-row flex-wrap items-end justify-center">
+                        {displayImages}
+                        {/* <img src={configVariable.BASE_URL+data?.vehicles?.vehicleImage} alt="Vehicle" className=" h-[200px] w-[200px]"/> */}
                     </div>
                 </div>
                 <div className=" h-10"/>

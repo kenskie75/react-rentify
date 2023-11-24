@@ -64,3 +64,9 @@ export const payBooking = async(payload:any)=>{
 
     return response.data;
 }
+
+export const cancelPendingBooking = async(refId:string)=>{
+    const response = await axiosInstance.post(`bookings/cancel/${refId}`);
+
+    return response.data;
+}
