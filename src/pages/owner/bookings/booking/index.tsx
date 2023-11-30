@@ -154,9 +154,9 @@ export default function Booking() {
             if(user.user_type === 'OWNER'){
                 return(
                     <>
-                    <Button text="Accept" onClick={handleAccept}/>
+                    <Button text="Confirm Booking" onClick={handleAccept}/>
                     <div className=" h-5"/>
-                    <Button text="Declined" onClick={handleDeclined}/>
+                    <Button text="Decline Booking" onClick={handleDeclined}/>
                     </>
                 );
             }

@@ -4,10 +4,15 @@ import { Routes } from "../../types/Routes.enum";
 import { useEffect, useMemo, useState } from "react";
 import { useLocation } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import useGetActiveNotif from '../../hooks/notification/useGetActiveNotif';
 export default  function Navigation() {
     const [user,setUser] = useState<any>(null);
     const location = useLocation();
- 
+    const {sendRequest,data} = useGetActiveNotif();
+
+    const displayNotifCount = useMemo(()=>{
+        return data.length;
+    },[data])
 
     const getUser = async()=>{
         const data = await localStorage.getItem('account');
@@ -22,7 +27,6 @@ export default  function Navigation() {
         await localStorage.clear();
         window.location.href=Routes.HOME;
      }
- 
  
    function handleLogout(){
      Swal.fire({
@@ -71,8 +75,8 @@ export default  function Navigation() {
                 <a href={Routes.PROFILE}  className=" text-white px-4 hover:text-slate-300" >
                         {user?.username}
                 </a>
-                <a href={Routes.NOTIFICATION}  className=" text-white px-4 hover:text-slate-300" >
-                    <MdNotifications className=' text-2xl'/>
+                <a href={Routes.NOTIFICATION}  className=" text-white px-4 hover:text-slate-300 relative" >
+                    <label className=' absolute top-[-10px] right-[10px]'>{displayNotifCount}</label><MdNotifications className=' text-2xl'/>
                 </a>
                 <p className=' text-white px-4 hover:text-slate-300 text-xl' onClick={handleLogout}><MdOutlineLogout/></p>
             </>)    
@@ -92,18 +96,29 @@ export default  function Navigation() {
             <a href={Routes.PROFILE}  className=" text-white px-4 hover:text-slate-300" >
                 {user?.username}
             </a>
-            <a href={Routes.NOTIFICATION}  className=" text-white px-4 hover:text-slate-300" >
-                    <MdNotifications className=' text-2xl'/>
-                </a>
+            <a href={Routes.NOTIFICATION}  className=" text-white px-4 hover:text-slate-300 relative" >
+                    <label className=' absolute top-[-10px] right-[10px]'>{displayNotifCount}</label><MdNotifications className=' text-2xl'/>
+            </a>
             <p className=' text-white px-4 hover:text-slate-300 text-xl' onClick={handleLogout}><MdOutlineLogout/></p>
         </>)
         
-    },[user])
+    },[user,displayNotifCount])
     
     useEffect(()=>{
         getUser()
     },[])
+    
+    const MINUTE_MS = 10000;
 
+    useEffect(() => {
+      const interval = setInterval(() => {
+        sendRequest();
+      }, MINUTE_MS);
+    
+      return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
+    }, [])
+
+   
     const displayNav = useMemo(()=>{
 
         if(location.pathname.split('/')[1] === 'viewmaps' || location.pathname.split('/')[1] === 'show-maps' || user?.user_type === 'ADMIN'){
