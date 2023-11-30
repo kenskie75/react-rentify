@@ -25,5 +25,6 @@ export enum Routes {
     OWNER_REQUEST = '/requests',
     CATEGORIES = '/categories',
     SUBSCRIPTION = '/subscription',
-    VEHICLE_DETAILS = '/vehicledetails'
+    VEHICLE_DETAILS = '/vehicledetails',
+    NOTIFICATION = '/notification'
 }

@@ -14,6 +14,7 @@ import Profile from '../../pages/profile';
 import Subscription from '../../pages/owner/Subscription';
 import VehicleDetails from '../../pages/owner/vehicles/VehicleDetails';
 import DriverDetails from '../../pages/owner/drivers/DriverDetails';
+import Notifications from '../../pages/Notification';
 
 
 
@@ -71,6 +72,10 @@ export default function Owner() {
         <Route
           path={Routes.DRIVER+"/:id"} element={<DriverDetails/>}
         />
+        <Route
+          path={Routes.NOTIFICATION} element={<Notifications/>}
+        />
+          
     </ReactRoutes>
   )
 }

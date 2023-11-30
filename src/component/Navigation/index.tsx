@@ -1,5 +1,5 @@
 'use client';
-import { MdOutlineLogout } from 'react-icons/md';
+import { MdOutlineLogout, MdNotifications } from 'react-icons/md';
 import { Routes } from "../../types/Routes.enum";
 import { useEffect, useMemo, useState } from "react";
 import { useLocation } from 'react-router-dom';
@@ -67,23 +67,12 @@ export default  function Navigation() {
 
         if(user.user_type === 'OWNER'){
             return(<>
-                <a href={Routes.OWNER_TRANSACTION}>
-                    <li className=" text-white px-4">
-                       Pending Transaction
-                    </li>
-                </a>
-                <a href={Routes.VEHICLE}>
-                    <li className=" text-white px-4">
-                       My Vehicle
-                    </li>
-                </a>
-                <a href={Routes.DRIVER}>
-                    <li className=" text-white px-4">
-                        Drivers
-                    </li>
-                </a>
+                
                 <a href={Routes.PROFILE}  className=" text-white px-4 hover:text-slate-300" >
                         {user?.username}
+                </a>
+                <a href={Routes.NOTIFICATION}  className=" text-white px-4 hover:text-slate-300" >
+                    <MdNotifications className=' text-2xl'/>
                 </a>
                 <p className=' text-white px-4 hover:text-slate-300 text-xl' onClick={handleLogout}><MdOutlineLogout/></p>
             </>)    
@@ -103,6 +92,9 @@ export default  function Navigation() {
             <a href={Routes.PROFILE}  className=" text-white px-4 hover:text-slate-300" >
                 {user?.username}
             </a>
+            <a href={Routes.NOTIFICATION}  className=" text-white px-4 hover:text-slate-300" >
+                    <MdNotifications className=' text-2xl'/>
+                </a>
             <p className=' text-white px-4 hover:text-slate-300 text-xl' onClick={handleLogout}><MdOutlineLogout/></p>
         </>)
         

@@ -7,6 +7,7 @@ import Booking from '../../pages/owner/bookings/booking';
 import ViewDestinationMaps from '../../pages/owner/bookings/ViewDestinationMaps';
 import RegisterOwner from '../../pages/customer/registerowner';
 import Profile from '../../pages/profile';
+import Notifications from '../../pages/Notification';
 
 export default function Renter() {
   return (
@@ -36,6 +37,10 @@ export default function Renter() {
         <Route
           path={Routes.PROFILE}
           element={<Profile/>}
+        />
+        <Route
+          path={Routes.NOTIFICATION}
+          element={<Notifications/>}
         />
     </ReactRoutes>
   )
