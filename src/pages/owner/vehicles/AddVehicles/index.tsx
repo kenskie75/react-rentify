@@ -16,6 +16,10 @@ import { configVariable } from "../../../../constant/ConfigVariable";
 
 const VEHICLE_TYPE:SelectInputOption[] = [
     {
+        name:"Choose Vehicle Type",
+        value:""
+    },
+    {
         name:'SUV',
         value:'SUV'
     },
