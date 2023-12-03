@@ -19,6 +19,7 @@ import { useModalContext } from "../../../../context/ModalContext/ModalContext";
 import AdditionalFee from "../components/AdditionalFeeModal";
 import PaymentModal from "../components/PaymentModal";
 import RatingModal from "./RatingModal";
+import DeclineModal from "./DeclineModal";
 
 export default function Booking() {
     const {id} = useParams();
@@ -124,24 +125,13 @@ export default function Booking() {
     }
   },[data?.booking?.ref_id])
 
-  async function handleDeclined(){
-    try {
-        const resp = await updateBookingStatus(data?.booking?.ref_id,BookingStatus.DECLINED);
-       
-        if(resp.status?.toString() === '1'){
-            Swal.fire({
-                text:'Successfully Declined',
-                icon:'success',
-            }).then(res=>{
-                if(res.isConfirmed){
-                    window.location.href=Routes.BOOKINGS
-                }
-            })
-        }
-    } catch (error) {
-        
-    }
+  function handleDeclined(){
+    setIsOpen(true);
+  setContent(<DeclineModal refId={data?.booking?.ref_id} setIsClose={setIsOpen}/>)
   }
+
+
+
   const displayButton = useMemo(()=>{
     const isBookIsToday =data?.booking?.book_date !== dayjs().format('YYYY-MM-DD');
 
