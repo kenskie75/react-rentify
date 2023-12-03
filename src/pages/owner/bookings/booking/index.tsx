@@ -89,7 +89,15 @@ export default function Booking() {
             const resp = await acceptTransactions(payload)
 
             if(parseInt(resp.status) == 1){
-                alertSuccess(resp.message);
+                Swal.fire({
+                    text:"Successfully Confirm",
+                    icon:'success'
+                }).then(res=>{
+                    if(res.isConfirmed){
+                        window.location.href=Routes.BOOKINGS
+                        return;
+                    }
+                })
                 return;
             }
     
