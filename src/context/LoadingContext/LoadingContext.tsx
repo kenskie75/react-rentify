@@ -25,7 +25,7 @@ export default function LoadingContextProvider(props:Props){
     function handleCloseLoading(){
         setTimeout(() => {
             setLoading(false);
-        },5000);
+        },2000);
        
     }
 
