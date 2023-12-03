@@ -1,6 +1,8 @@
 import { BrowserRouter } from 'react-router-dom';
 import './App.css';
 import { Navigation } from './component';
+import '@smastrom/react-rating/style.css'
+
 import { useMemo } from 'react';
 import useGetAccountFromStorage from './hooks/useGetAccountFromStorage';
 import UnAuth from './RouterComponents/UnAuth';

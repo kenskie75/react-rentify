@@ -1,13 +1,15 @@
 import Vehicles from '../../pages/customer/vehicles';
 import { Routes as ReactRoutes, Route } from 'react-router-dom';
 import { Routes } from '../../types/Routes.enum';
-import Vehicle from '../../pages/customer/vehicles/vehicle/inde';
+import Vehicle from '../../pages/customer/vehicles/vehicle';
 import MyTransactions from '../../pages/customer/mytransactions';
 import Booking from '../../pages/owner/bookings/booking';
 import ViewDestinationMaps from '../../pages/owner/bookings/ViewDestinationMaps';
 import RegisterOwner from '../../pages/customer/registerowner';
 import Profile from '../../pages/profile';
 import Notifications from '../../pages/Notification';
+import ConvoList from '../../pages/message/ConvoList';
+import Convo from '../../pages/message/Convo';
 
 export default function Renter() {
   return (
@@ -42,6 +44,8 @@ export default function Renter() {
           path={Routes.NOTIFICATION}
           element={<Notifications/>}
         />
+        <Route path={Routes.CONVO} element={<ConvoList/>}/>
+        <Route path={Routes.MESSAGE+"/:id"} element={<Convo/>}/>
     </ReactRoutes>
   )
 }

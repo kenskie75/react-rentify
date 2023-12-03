@@ -15,6 +15,9 @@ import Subscription from '../../pages/owner/Subscription';
 import VehicleDetails from '../../pages/owner/vehicles/VehicleDetails';
 import DriverDetails from '../../pages/owner/drivers/DriverDetails';
 import Notifications from '../../pages/Notification';
+import ConvoList from '../../pages/message/ConvoList';
+import Convo from '../../pages/message/Convo';
+import ViewMaps from '../../pages/driver/ViewMaps';
 
 
 
@@ -75,6 +78,12 @@ export default function Owner() {
         <Route
           path={Routes.NOTIFICATION} element={<Notifications/>}
         />
+        <Route path={Routes.CONVO} element={<ConvoList/>}/>
+        <Route path={Routes.MESSAGE+"/:id"} element={<Convo/>}/>
+        <Route 
+        path={Routes.DRIVER_VIEW_MAPS+"/:id"}
+        element={<ViewMaps/>}
+       />
           
     </ReactRoutes>
   )

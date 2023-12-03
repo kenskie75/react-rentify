@@ -11,6 +11,7 @@ import { updateBookingStatus } from '../../../services/BookingsService.service';
 import Swal from 'sweetalert2';
 import { Routes } from '../../../types/Routes.enum';
 import { displayStatusByOwner } from '../../../utils/booking.utils';
+import useGetAccountFromStorage from '../../../hooks/useGetAccountFromStorage';
 const icon = require('../../../assets/marker/start.png');
 const destination = require('../../../assets/marker/destination.png')
 const vehicle =require('../../../assets/marker/vehiclemarker.png')
@@ -31,7 +32,7 @@ export default function ViewMaps() {
    const {id} = useParams();
    const {data} = useGetBookingsByRefId({refId:id?id:''});
    const [mylocation,setMyLocation] = useState<LatLngExpression | null>(null);
-  
+    const {user} = useGetAccountFromStorage();
    const newOrigin:LatLngExpression = mylocation ? mylocation : [10.3055615,123.8563657];
   
   console.log(newOrigin)
@@ -124,6 +125,14 @@ const handleDone  = useCallback(async()=>{
  
 
 const displayButton = useMemo(()=>{
+
+    if(!user){
+        return;
+    }
+
+    if(user.user_type === 'OWNER'){
+        return;
+    }
     if(data?.booking?.status === BookingStatus.TO_PICK_UP){
         return <Button text='Passenger Picked Up' onClick={handlePickUp}/>
     }
@@ -132,7 +141,7 @@ const displayButton = useMemo(()=>{
         return <Button text="Arrived to the destination" onClick={handleDone}/>
     }
 
-},[data?.booking?.status, handleDone, handlePickUp])
+},[data?.booking?.status, handleDone, handlePickUp,user])
 const displayMyCurrentLocation = useMemo(()=>{
     if(!mylocation){
         return;
@@ -153,7 +162,8 @@ const displayMyCurrentLocation = useMemo(()=>{
         }
     }, 5000)
     return () => clearTimeout(timer)
-   }, [data?.booking?.status, mylocation])
+   }, [data?.booking?.status, mylocation]);
+
    
    return (
     <div className=' w-screen h-screen relative'>

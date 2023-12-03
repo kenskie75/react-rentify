@@ -18,6 +18,8 @@ import { calculateDistance } from '../../../../utils/location.utils';
 import SelectInput from '../../../../component/Select';
 import Swal from 'sweetalert2';
 import { Routes } from '../../../../types/Routes.enum';
+import { useModalContext } from '../../../../context/ModalContext/ModalContext';
+import MessageModal from '../../../../component/MessageModal';
 type ValuePiece = Date | null;
 
 type Value = ValuePiece | [ValuePiece, ValuePiece];
@@ -49,8 +51,9 @@ export default function Vehicle() {
     const [totalFee,setTotalFee] = useState<string>('');
     const [isOpen,setIsOpen] = useState<boolean>(false);
     const [paymentMethod,setPaymentMethod] = useState<string>("");
+    const {setIsOpen:setModalOpen,setContent} = useModalContext()
     const [time,setTime] = useState<string>('');
-        const originIcon = new L.DivIcon({
+    const originIcon = new L.DivIcon({
      className:' pin2',
       iconSize:[25,25]
     });
@@ -269,6 +272,12 @@ const [post,setPost] = useState<LatLngExpression>();
         alertError();
     }
 
+
+    function openMessageModal(){
+        setModalOpen(true)
+        setContent(<MessageModal vehicle={vehicle} setIsOpen={setModalOpen}/>)
+    }
+
     return (
         <>
           <Modal isOpen={isOpen} setIsOpen={setIsOpen} isFullScreen>
@@ -307,6 +316,8 @@ const [post,setPost] = useState<LatLngExpression>();
                     {displayDestinationIsSet}
                     <Button text={'Select Destination'} outline onClick={()=>getLocation()}/>
                     <div className=' h-10'/>
+                    <Button text="Message" outline onClick={()=>openMessageModal()} />
+                    <div className=' h-5'/>
                     <Button text="Book Now" onClick={handleBookNow}/>
                 </div>
                 </div>

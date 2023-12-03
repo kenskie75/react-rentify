@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { Button, Container, ListItem } from "../../../../component";
 import useGetBookingsByRefId from "../../../../hooks/bookings/useGetBookingsByRefId";
+
 import { formatFullName } from "../../../../utils/string";
 import dayjs from "dayjs";
 import { configVariable } from "../../../../constant/ConfigVariable";
@@ -11,11 +12,13 @@ import { acceptTransactions, cancelPendingBooking, updateBookingStatus } from ".
 import useGetAccountFromStorage from "../../../../hooks/useGetAccountFromStorage";
 import { Routes } from "../../../../types/Routes.enum";
 import { BookingStatus } from "../../../../types/BookingStatus.enum";
+import { Rating } from '@smastrom/react-rating'
 import Swal from "sweetalert2";
 import { displayStatusByOwner, displaystatus } from "../../../../utils/booking.utils";
 import { useModalContext } from "../../../../context/ModalContext/ModalContext";
 import AdditionalFee from "../components/AdditionalFeeModal";
 import PaymentModal from "../components/PaymentModal";
+import RatingModal from "./RatingModal";
 
 export default function Booking() {
     const {id} = useParams();
@@ -189,7 +192,14 @@ export default function Booking() {
                     return(
                         <Button text='View Maps' disable={isBookIsToday}  onClick={()=>window.location.href=Routes.DRIVER_VIEW_MAPS+'/'+data?.booking?.ref_id}/>
                 );
-            }
+                }
+
+                if(user.user_type === 'OWNER'){
+                    return(
+                        <Button text='Locate Driver' disable={isBookIsToday}  onClick={()=>window.location.href=Routes.DRIVER_VIEW_MAPS+'/'+data?.booking?.ref_id}/>
+                );
+                }
+                
             break;
         }   
     
@@ -217,6 +227,24 @@ export default function Booking() {
         alertError();
     }
   }
+
+  function handleRatingModal(){
+    setIsOpen(true)
+    setContent(<RatingModal setIsOpen={setIsOpen} owner_id={data?.owner?.user_id}/>);
+ 
+  }
+
+
+
+  const displayRatingButton = useMemo(()=>{
+    if(data?.booking?.status === BookingStatus.SUCCESS && user?.user_type === 'RENTER'){    
+       
+        return (<>
+         <button onClick={handleRatingModal} className=" bg-slate-700 text-white px-3 py-2 rounded-3xl">Rate Services</button>
+         </>)
+    }
+  },[data?.booking?.status,user])
+
   const textStatusDisplay = useMemo(()=>{
     if(!user){
         return;
@@ -309,6 +337,8 @@ export default function Booking() {
                 <h1 className=" font-bold text-xl">{data?.booking?.ref_id}</h1>
                 <div className=" h-5"/>
                 {textStatusDisplay}
+                <div className=" h-3"/>
+                {displayRatingButton}
                 <div className=" h-10"/>
                 <ListItem label="Renter Name" value={formatFullName({firstName:data?.customer?.firstname,middleName:data?.customer?.middlename,lastName:data?.customer?.lastname})}/>
                 <ListItem label="Pick Up Date" value={dayjs(data?.booking?.book_date).format("MM-DD-YYYY") + ` ${data?.booking?.pickup_time}`}/>

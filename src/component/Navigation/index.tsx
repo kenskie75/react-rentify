@@ -1,5 +1,5 @@
 'use client';
-import { MdOutlineLogout, MdNotifications } from 'react-icons/md';
+import { MdOutlineLogout, MdNotifications, MdEmail } from 'react-icons/md';
 import { Routes } from "../../types/Routes.enum";
 import { useEffect, useMemo, useState } from "react";
 import { useLocation } from 'react-router-dom';
@@ -78,6 +78,9 @@ export default  function Navigation() {
                 <a href={Routes.NOTIFICATION}  className=" text-white px-4 hover:text-slate-300 relative" >
                     <label className=' absolute top-[-10px] right-[10px]'>{displayNotifCount}</label><MdNotifications className=' text-2xl'/>
                 </a>
+                <a href={Routes.NOTIFICATION}  className=" text-white px-4 hover:text-slate-300 relative" >
+                    <label className=' absolute top-[-10px] right-[10px]'>{}</label><MdEmail className=' text-2xl'/>
+                </a>
                 <p className=' text-white px-4 hover:text-slate-300 text-xl' onClick={handleLogout}><MdOutlineLogout/></p>
             </>)    
         }
@@ -99,6 +102,9 @@ export default  function Navigation() {
             <a href={Routes.NOTIFICATION}  className=" text-white px-4 hover:text-slate-300 relative" >
                     <label className=' absolute top-[-10px] right-[10px]'>{displayNotifCount}</label><MdNotifications className=' text-2xl'/>
             </a>
+            <a href={Routes.CONVO}  className=" text-white px-4 hover:text-slate-300 relative" >
+                    <label className=' absolute top-[-10px] right-[10px]'>{}</label><MdEmail className=' text-2xl'/>
+                </a>
             <p className=' text-white px-4 hover:text-slate-300 text-xl' onClick={handleLogout}><MdOutlineLogout/></p>
         </>)
         

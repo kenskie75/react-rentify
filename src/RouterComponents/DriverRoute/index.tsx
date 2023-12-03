@@ -6,6 +6,8 @@ import Booking from '../../pages/owner/bookings/booking';
 import ViewMaps from '../../pages/driver/ViewMaps';
 import ViewDestinationMaps from '../../pages/owner/bookings/ViewDestinationMaps';
 import Profile from '../../pages/profile';
+import ConvoList from '../../pages/message/ConvoList';
+import Convo from '../../pages/message/Convo';
 
 export default function DriverRoute() {
   return (
@@ -31,6 +33,8 @@ export default function DriverRoute() {
           path={Routes.PROFILE}
           element={<Profile/>}
         />
+        <Route path={Routes.CONVO} element={<ConvoList/>}/>
+        <Route path={Routes.MESSAGE+"/:id"} element={<Convo/>}/>
     </ReactRoutes>
   )
 }
