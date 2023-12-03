@@ -269,7 +269,7 @@ const [post,setPost] = useState<LatLngExpression>();
             return;
         }
 
-        alertError();
+        alertError(response.message);
     }
 
 
