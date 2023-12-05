@@ -28,6 +28,10 @@ const VEHICLE_TYPE:SelectInputOption[] = [
         value:'CAR'
     },
     {
+        name:"VAN",
+        value:'VAN'
+    },
+    {
         name:'TRUCK',
         value:'TRUCK'
     }
@@ -75,7 +79,7 @@ export default function AddVehicle() {
             }
             const user = JSON.parse(storage);
             if(images.length < 3){
-                alertWarning("Image should atleas 3");
+                alertWarning("Image should atleast 3");
 
                 return;
             }
@@ -259,8 +263,11 @@ export default function AddVehicle() {
                     <input type="file" onChange={(e)=>setCrImg(e.target.files?.[0])}/>
                 </div>  
             </div>
-            <div className=" h-10"/>
-            <Button text="Submit" onClick={()=>handleSubmit()}/>
+            <div className=" h-4"/>
+            <div className="flex justify-between gap-3">
+                <Button text="Submit" onClick={() => handleSubmit()} />
+                <Button text='Back' onClick={() => window.history.back()} />
+            </div>
         </div>        
     </div>
 

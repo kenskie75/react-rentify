@@ -14,15 +14,29 @@ const [description,setDescription] = useState<string>("");
 
 const [model,setModel] = useState<string>("");
 const [capacity,setCapacity] = useState<string>("");
+const [price,setPrice] = useState<string>("");
+const containsSpecialCharacters = (input: string): boolean => {
+    const regex = /[!@#$%^&*(),.?":{}|<>]/;
+    return regex.test(input);
+};
 
 
   async function handleUpdate(){
     try {
+        if (containsSpecialCharacters(brand) || containsSpecialCharacters(description) || containsSpecialCharacters(model) || containsSpecialCharacters(capacity) || containsSpecialCharacters(price)) {
+            Swal.fire({
+                icon: 'error',
+                text: 'Special characters are not allowed in the input fields.',
+            });
+            return;
+        }
+
         const payload = {
             brand:brand === '' ? data?.brand : brand,
             description:description === '' ? data?.description : description,
             model: model === '' ? data?.model : model,
-            capacity: capacity === '' ? data?.capacity : capacity
+            capacity: capacity === '' ? data?.capacity : capacity,
+            price: price === '' ? data?.price : parseInt(price),
         }
         
         const resp = await updateVehicle(data?.vehicle_id,payload);
@@ -44,7 +58,7 @@ const [capacity,setCapacity] = useState<string>("");
   
   return (
     <div className=' w-full'>
-        <h1>Update Details</h1>
+        <h1 className=" text-lg font-bold">Update Details</h1>
         <div className=' h-10'/>
         <p className=' text-sm text-gray-600'>Brand</p>
         <TextInput label="" placeholder={data?.brand} onChange={(e)=>setBrand(e.target.value)}/>
@@ -57,9 +71,12 @@ const [capacity,setCapacity] = useState<string>("");
         <div className=' h-5'/>
         <p className=' text-sm text-gray-600'>Capacity</p>
         <TextInput label="" placeholder={data?.capacity+'kg'} onChange={(e)=>setCapacity(e.target.value)}/>
+        <div className=' h-5'/>
+        <p className=' text-sm text-gray-600'>Price</p>
+        <TextInput label="" placeholder={'Php'+data?.price} onChange={(e)=>setPrice(e.target.value)}/>
         <div className=' my-10 flex w-full flex-row gap-5'>
             <Button text='Update Now' onClick={handleUpdate}/>
-            <Button text='Back' onClick={()=>props.setIsUpdate(false)} outline/>
+            <Button text='Back' onClick={()=>props.setIsUpdate(false)}/>
         </div>
     </div>
   )

@@ -27,19 +27,22 @@ export default function Drivers() {
     }, [data]);
 
     return (
-    <div className=' pt-32 flex justify-center'>
-        <div className=" bg-white w-1/2 p-8">
-            <div className=' flex w-full '>
-                <div className=' flex flex-1 items-center'>
-                    <h1 className=" font-bold text-lg">My Drivers</h1>
+        <div className='pt-32 flex justify-center'>
+        <div className="bg-white w-1/2 p-8">
+          <div className="flex items-center justify-between">
+            <h1 className="text-xl font-bold">My Drivers</h1>
+            <div className="flex gap-3">
+                <div>
+                <Button text='Add Driver' onClick={()=>window.location.href=Routes.CREATE_DRIVER}/>
                 </div>
-                <div className=' flex flex-1 justify-end'>
-                    <Button text='Add Driver'  onClick={()=>window.location.href=Routes.CREATE_DRIVER}/>
-                </div>
+              <div>
+                <Button text='Back' onClick={() => window.history.back()} />
+              </div>
             </div>
-            <div className=" h-10"/>
-            {displayDrivers}
+          </div>
+          <div className="h-10" />
+          {displayDrivers}
         </div>
-    </div>
+      </div>
   )
 }

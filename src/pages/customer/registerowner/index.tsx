@@ -113,9 +113,11 @@ export default function RegisterOwner() {
              
               <div className=' h-10'/>
               <TextInput label='Document Type' onChange={(e)=>setDocsType(e.target.value)}/>
-              <div className=' h-10'/>
-              <Button text='Submit' onClick={()=>handleSubmit()}/>
-  
+                <div className=' h-10'/>
+              <div className=' my-10 flex w-full flex-row gap-5'>
+                <Button text='Submit' onClick={()=>handleSubmit()}/>
+                <Button text='Back' onClick={() => window.history.back()} />
+              </div>
         </div>
           )}
          </div>

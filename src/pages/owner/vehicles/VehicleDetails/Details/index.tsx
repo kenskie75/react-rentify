@@ -27,7 +27,7 @@ export default function Details(props:Props) {
         <ListItem label="Price" value={item?.price+" per km"}/>
         <div className=" h-10"/>
         <h1 className=" font-bold">Documents</h1>
-        <div className=" mt-10 flex flex-row">
+        <div className=" mt-10 flex flex-row justify-center gap-3">
             <img src={configVariable.BASE_URL + item?.vehicleOr} alt="OR" className=" w-32 h-32"/>
             <img src={configVariable.BASE_URL + item?.vehicleCr} alt='Cr' className=" h-32 w-32"/>
         </div>

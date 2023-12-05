@@ -178,7 +178,7 @@ export default function Subscription() {
     return (
         <Container>
             <div className=' w-1/2 m-auto  p-3'>
-            <h1>Subscription</h1>
+            <h1 className="text-xl font-bold">Subscription</h1>
             <div className=' h-16'/>
             {displayMySubscription}
                 <div className=' w-full grid grid-cols-2 gap-4'>

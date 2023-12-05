@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import useGetVehicleDetails from '../../../../hooks/vehicle/useGetVehicleDetails';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Button, Container } from '../../../../component';
 import UpdateDetails from './UpdateVehicle';
 import Details from './Details';
@@ -13,6 +13,7 @@ export default function VehicleDetails() {
     const {data:item} = useGetVehicleDetails({id:id?id:''});
     const [isUpdated,setIsUpdated] = useState<boolean>(false);
     const {alertError} = useAlertOption();
+    const navigate = useNavigate();
     const displayContent = useMemo(() => {
         if(isUpdated){
             return <UpdateDetails data={item} setIsUpdate={setIsUpdated}/>
@@ -68,6 +69,7 @@ export default function VehicleDetails() {
                         <div className=' flex flex-row gap-5'>
                             <Button text='Update Details' onClick={()=>setIsUpdated(true)}/>
                             <Button text='Remove this Vehicle' outline onClick={()=>handleOpenModal()}/>
+                            <Button text='Back' onClick={() => navigate(-1)} />
                         </div>
                     }
                 </div>

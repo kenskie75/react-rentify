@@ -2,6 +2,7 @@ import React, { useMemo } from 'react'
 import { Container } from '../../../component'
 import useGetTransactions from '../../../hooks/bookings/useGetTransactions'
 import TransactionCard from '../bookings/components/TransactionCard';
+import { Button } from "../../../component";
 
 export default function Transactions() {
     const {data} = useGetTransactions();
@@ -12,14 +13,19 @@ export default function Transactions() {
       })
       },[data])
   return (
-    <Container>
-            <div className=' w-full flex justify-center'>
-                <div className=' w-1/2 bg-white p-4'>
-                    <h1 className=' text-xl font-bold'>Transactions</h1>
-                    <div className=' h-5'/>
-                    {displayData}
+    <div className='pt-32 flex justify-center'>
+          <div className="bg-white w-1/2 p-8">
+            <div className="flex items-center justify-between">
+              <h1 className="text-xl font-bold">Transaction</h1>
+              <div className="flex gap-3">
+                <div>
+                  <Button text='Back' onClick={() => window.history.back()} />
                 </div>
+              </div>
             </div>
-        </Container>
+            <div className="h-10" />
+            {displayData}
+          </div>
+        </div>
   )
 }

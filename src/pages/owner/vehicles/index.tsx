@@ -108,22 +108,22 @@ export default function Vehicles() {
     }, [data])
 
     return (
-    <div className=' pt-32 flex justify-center'>
-        <div className=" bg-white w-1/2 p-8">
-            <div className=" flex flex-row">
-                <div className=" flex items-center">
-                    <h1 className=" text-xl font-bold">Vehicle</h1>
+        <div className='pt-32 flex justify-center'>
+          <div className="bg-white w-1/2 p-8">
+            <div className="flex items-center justify-between">
+              <h1 className="text-xl font-bold">Vehicle</h1>
+              <div className="flex gap-3">
+                <div>
+                  <Button text="Add Vehicle" onClick={handleAddVehicle} />
                 </div>
-                <div className=" flex flex-1 justify-end">
-                    <div className=" w-1/4">
-                        <Button text="Add Vehicle" onClick={handleAddVehicle}/>
-                    </div>
+                <div>
+                  <Button text='Back' onClick={() => window.history.back()} />
                 </div>
+              </div>
             </div>
-            <div className=" h-10"/>
+            <div className="h-10" />
             {displayData}
-            <div/>
-         </div>        
-    </div>
-  )
+          </div>
+        </div>
+      )
 }

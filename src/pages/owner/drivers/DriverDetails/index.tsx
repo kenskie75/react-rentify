@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Button, Container } from '../../../../component';
 import UpdateDriver from './UpdateDriver';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import useGetDriverById from '../../../../hooks/drivers/useGetDriverById';
 import Details from './Details';
 import { updateDriverDetails } from '../../../../services/DriverService.service';
@@ -13,6 +13,7 @@ export default function DriverDetails() {
     const {data} = useGetDriverById({id:id ? id : ''});
     const [isUpdate,setIsUpdate] = useState<boolean>(false);
     const {alertError} = useAlertOption();
+    const navigate = useNavigate();
      const displayContent = useMemo(() => {
         if(isUpdate){
             return <UpdateDriver setIsUpdate={setIsUpdate} data={data}/>
@@ -35,7 +36,7 @@ export default function DriverDetails() {
                     text:'Successfully Removed',
                 }).then((val)=>{
                     if(val.isConfirmed){
-                        window.location.href=Routes.DRIVERS;
+                        navigate(Routes.DRIVERS);
                     }
                 })            
             }
@@ -68,6 +69,7 @@ export default function DriverDetails() {
                        <div className=' py-5 flex flex-row gap-5'>
                             <Button text='Update Details' onClick={()=>setIsUpdate(true)}/>
                             <Button text='Remove this Driver' onClick={()=>handleOpenModal()} outline/>
+                            <Button text='Back' onClick={() => navigate(-1)} />
                        </div>
                     }
                
