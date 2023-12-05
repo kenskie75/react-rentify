@@ -170,14 +170,14 @@ export default function Booking() {
 
           
             
-            if(!user.user_type){
+            if(!user?.user_type){
                 return(
                     <Button text='Pick Up Passenger' disable={isBookIsToday}  onClick={()=>handlePickUp(BookingStatus.TO_PICK_UP)}/>
                 );
             }
             break;
             case BookingStatus.TO_PICK_UP:        
-                if(!user.user_type){
+                if(!user?.user_type){
                     return(
                         <Button text='View Maps' disable={isBookIsToday}  onClick={()=>window.location.href=Routes.DRIVER_VIEW_MAPS+'/'+data?.booking?.ref_id}/>
                 );
@@ -198,7 +198,7 @@ export default function Booking() {
     
         const allowedStatus = [BookingStatus.PICK_UP,BookingStatus.TO_PICK_UP]
         
-        if((user.user_type === 'OWNER' || user.user_type === 'RENTER') && allowedStatus.includes(data?.booking?.status)){
+        if((user?.user_type === 'OWNER' || user?.user_type === 'RENTER') && allowedStatus.includes(data?.booking?.status)){
             return(
                 <Button text='Locate Driver' disable={isBookIsToday}  onClick={()=>window.location.href=Routes.DRIVER_VIEW_MAPS+'/'+data?.booking?.ref_id}/>
             );
