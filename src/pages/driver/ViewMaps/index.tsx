@@ -1,8 +1,8 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { Button } from '../../../component'
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Button } from '../../../component';
 import 'react-calendar/dist/Calendar.css';
 import 'leaflet/dist/leaflet.css';
-import L, { LatLngExpression, LeafletMouseEvent, Marker, } from 'leaflet';
+import L, { LatLngExpression } from 'leaflet';
 import { MapContainer, TileLayer, Marker as MapMarker } from 'react-leaflet';
 import { useParams } from 'react-router-dom';
 import useGetBookingsByRefId from '../../../hooks/bookings/useGetBookingsByRefId';
@@ -130,7 +130,7 @@ const displayButton = useMemo(()=>{
         return;
     }
 
-    if(user.user_type === 'OWNER'){
+    if(user.user_type === 'OWNER' || user.user_type === 'RENTER'){
         return;
     }
     if(data?.booking?.status === BookingStatus.TO_PICK_UP){

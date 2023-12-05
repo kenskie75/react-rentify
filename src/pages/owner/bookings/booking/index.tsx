@@ -12,7 +12,6 @@ import { acceptTransactions, cancelPendingBooking, updateBookingStatus } from ".
 import useGetAccountFromStorage from "../../../../hooks/useGetAccountFromStorage";
 import { Routes } from "../../../../types/Routes.enum";
 import { BookingStatus } from "../../../../types/BookingStatus.enum";
-import { Rating } from '@smastrom/react-rating'
 import Swal from "sweetalert2";
 import { displayStatusByOwner, displaystatus } from "../../../../utils/booking.utils";
 import { useModalContext } from "../../../../context/ModalContext/ModalContext";
@@ -192,16 +191,18 @@ export default function Booking() {
                 );
                 }
 
-                if(user.user_type === 'OWNER'){
-                    return(
-                        <Button text='Locate Driver' disable={isBookIsToday}  onClick={()=>window.location.href=Routes.DRIVER_VIEW_MAPS+'/'+data?.booking?.ref_id}/>
-                );
-                }
+             
                 
             break;
         }   
     
-   
+        const allowedStatus = [BookingStatus.PICK_UP,BookingStatus.TO_PICK_UP]
+        
+        if((user.user_type === 'OWNER' || user.user_type === 'RENTER') && allowedStatus.includes(data?.booking?.status)){
+            return(
+                <Button text='Locate Driver' disable={isBookIsToday}  onClick={()=>window.location.href=Routes.DRIVER_VIEW_MAPS+'/'+data?.booking?.ref_id}/>
+            );
+        }
     
   },[data?.booking?.book_date, data?.booking?.status, handleAccept, handlePickUp, user])
    
@@ -237,11 +238,13 @@ export default function Booking() {
   const displayRatingButton = useMemo(()=>{
     if(data?.booking?.status === BookingStatus.SUCCESS && user?.user_type === 'RENTER'){    
        
-        return (<>
+        return (<div className=" flex flex-row gap-3">
+        
          <button onClick={handleRatingModal} className=" bg-slate-700 text-white px-3 py-2 rounded-3xl">Rate Services</button>
-         </>)
+         <button onClick={()=>window.location.href=Routes.RECEIPT+"/"+data?.booking?.ref_id} className=" bg-slate-700 text-white px-3 py-2 rounded-3xl">Print Reciept</button>
+         </div>)
     }
-  },[data?.booking?.status,user])
+  },[data?.booking?.ref_id, data?.booking?.status, handleRatingModal, user?.user_type])
 
   const textStatusDisplay = useMemo(()=>{
     if(!user){
