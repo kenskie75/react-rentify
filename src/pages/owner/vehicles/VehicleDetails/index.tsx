@@ -69,7 +69,6 @@ export default function VehicleDetails() {
                         <div className=' flex flex-row gap-5'>
                             <Button text='Update Details' onClick={()=>setIsUpdated(true)}/>
                             <Button text='Remove this Vehicle' outline onClick={()=>handleOpenModal()}/>
-                            <Button text='Back' onClick={() => navigate(-1)} />
                         </div>
                     }
                 </div>

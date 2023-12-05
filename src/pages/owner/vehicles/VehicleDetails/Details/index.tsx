@@ -1,5 +1,5 @@
 import React from 'react'
-import { ListItem } from '../../../../../component'
+import { ListItem, Button } from '../../../../../component'
 import { configVariable } from '../../../../../constant/ConfigVariable'
 
 type Props = {
@@ -11,7 +11,12 @@ export default function Details(props:Props) {
     const {data:item} = props;
     return (
     <div className=" w-ful ">
+        <div className="flex justify-between items-center mb-3">
         <h1 className=" text-lg font-bold">Vehicle Details</h1>
+            <div>
+                <Button text='Back' onClick={() => window.history.back()} />
+            </div>
+        </div>
         <div className=" h-10"/>
         <div className=" grid grid-cols-3 gap-3 m-auto w-3/4">
             {item?.images.map((val:any,i:number)=>{

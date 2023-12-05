@@ -69,7 +69,6 @@ export default function DriverDetails() {
                        <div className=' py-5 flex flex-row gap-5'>
                             <Button text='Update Details' onClick={()=>setIsUpdate(true)}/>
                             <Button text='Remove this Driver' onClick={()=>handleOpenModal()} outline/>
-                            <Button text='Back' onClick={() => navigate(-1)} />
                        </div>
                     }
                
